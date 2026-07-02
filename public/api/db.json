@@ -1,0 +1,685 @@
+{
+  "classes": [
+    {
+      "id": "1",
+      "name": "Fitness",
+      "description": "Fitness training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 220
+    },
+    {
+      "id": "2",
+      "name": "CrossFit",
+      "description": "CrossFit training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 240
+    },
+    {
+      "id": "3",
+      "name": "Yoga",
+      "description": "Yoga training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 260
+    },
+    {
+      "id": "4",
+      "name": "Zumba",
+      "description": "Zumba training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 280
+    },
+    {
+      "id": "5",
+      "name": "Pilates",
+      "description": "Pilates training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 300
+    },
+    {
+      "id": "6",
+      "name": "Boxing",
+      "description": "Boxing training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 320
+    },
+    {
+      "id": "7",
+      "name": "HIIT",
+      "description": "HIIT training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 340
+    },
+    {
+      "id": "8",
+      "name": "Cardio",
+      "description": "Cardio training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 360
+    },
+    {
+      "id": "9",
+      "name": "Strength",
+      "description": "Strength training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 380
+    },
+    {
+      "id": "10",
+      "name": "Functional",
+      "description": "Functional training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 400
+    },
+    {
+      "id": "11",
+      "name": "Cycling",
+      "description": "Cycling training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 420
+    },
+    {
+      "id": "12",
+      "name": "Kickboxing",
+      "description": "Kickboxing training program.",
+      "image": "../images/home6_1.jpg",
+      "price": 440
+    }
+  ],
+  "trainers": [
+    {
+      "id": "1",
+      "name": "Trainer 1",
+      "specialty": "Fitness",
+      "experience": "4 Years",
+      "image": "trainer1.jpg"
+    },
+    {
+      "id": "2",
+      "name": "Trainer 2",
+      "specialty": "Yoga",
+      "experience": "5 Years",
+      "image": "trainer2.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Trainer 3",
+      "specialty": "CrossFit",
+      "experience": "6 Years",
+      "image": "trainer3.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Trainer 4",
+      "specialty": "Cardio",
+      "experience": "7 Years",
+      "image": "trainer4.jpg"
+    },
+    {
+      "id": "5",
+      "name": "Trainer 5",
+      "specialty": "Boxing",
+      "experience": "8 Years",
+      "image": "trainer5.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Trainer 6",
+      "specialty": "Pilates",
+      "experience": "9 Years",
+      "image": "trainer6.jpg"
+    },
+    {
+      "id": "7",
+      "name": "Trainer 7",
+      "specialty": "HIIT",
+      "experience": "10 Years",
+      "image": "trainer7.jpg"
+    },
+    {
+      "id": "8",
+      "name": "Trainer 8",
+      "specialty": "Strength",
+      "experience": "11 Years",
+      "image": "trainer8.jpg"
+    }
+  ],
+  "memberships": [
+    {
+      "id": "1",
+      "name": "Basic",
+      "price": 29,
+      "duration": "Monthly",
+      "features": ["Gym Access", "Locker", "WiFi"]
+    },
+    {
+      "id": "2",
+      "name": "Standard",
+      "price": 49,
+      "duration": "Monthly",
+      "features": ["Basic", "Group Classes", "Cardio"]
+    },
+    {
+      "id": "3",
+      "name": "Premium",
+      "price": 79,
+      "duration": "Monthly",
+      "features": ["Standard", "PT", "Sauna"]
+    },
+    {
+      "id": "4",
+      "name": "Student",
+      "price": 19,
+      "duration": "Monthly",
+      "features": ["Gym Access"]
+    },
+    {
+      "id": "5",
+      "name": "Family",
+      "price": 99,
+      "duration": "Monthly",
+      "features": ["4 Members", "Classes"]
+    },
+    {
+      "id": "6",
+      "name": "Annual",
+      "price": 699,
+      "duration": "Yearly",
+      "features": ["Premium", "2 Months Free"]
+    }
+  ],
+  "reviews": [
+    {
+      "id": "1",
+      "name": "Member 1",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client1.jpg"
+    },
+    {
+      "id": "2",
+      "name": "Member 2",
+      "rating": 5,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client2.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Member 3",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client3.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Member 4",
+      "rating": 5,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client4.jpg"
+    },
+    {
+      "id": "5",
+      "name": "Member 5",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client5.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Member 6",
+      "rating": 5,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client6.jpg"
+    },
+    {
+      "id": "7",
+      "name": "Member 7",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client7.jpg"
+    },
+    {
+      "id": "8",
+      "name": "Member 8",
+      "rating": 5,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client8.jpg"
+    },
+    {
+      "id": "9",
+      "name": "Member 9",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client9.jpg"
+    },
+    {
+      "id": "10",
+      "name": "Member 10",
+      "rating": 5,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client10.jpg"
+    }
+  ],
+  "blogs": [
+    {
+      "id": "1",
+      "title": "Gym Article 1",
+      "date": "2026-07-01",
+      "author": "Admin",
+      "image": "blog1.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "2",
+      "title": "Gym Article 2",
+      "date": "2026-07-02",
+      "author": "Admin",
+      "image": "blog2.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "3",
+      "title": "Gym Article 3",
+      "date": "2026-07-03",
+      "author": "Admin",
+      "image": "blog3.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "4",
+      "title": "Gym Article 4",
+      "date": "2026-07-04",
+      "author": "Admin",
+      "image": "blog4.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "5",
+      "title": "Gym Article 5",
+      "date": "2026-07-05",
+      "author": "Admin",
+      "image": "blog5.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "6",
+      "title": "Gym Article 6",
+      "date": "2026-07-06",
+      "author": "Admin",
+      "image": "blog6.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "7",
+      "title": "Gym Article 7",
+      "date": "2026-07-07",
+      "author": "Admin",
+      "image": "blog7.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "8",
+      "title": "Gym Article 8",
+      "date": "2026-07-08",
+      "author": "Admin",
+      "image": "blog8.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "9",
+      "title": "Gym Article 9",
+      "date": "2026-07-09",
+      "author": "Admin",
+      "image": "blog9.jpg",
+      "summary": "Useful fitness tips."
+    },
+    {
+      "id": "10",
+      "title": "Gym Article 10",
+      "date": "2026-07-10",
+      "author": "Admin",
+      "image": "blog10.jpg",
+      "summary": "Useful fitness tips."
+    }
+  ],
+  "gallery": [
+    {
+      "id": "1",
+      "image": "gallery1.jpg",
+      "title": "Gallery 1"
+    },
+    {
+      "id": "2",
+      "image": "gallery2.jpg",
+      "title": "Gallery 2"
+    },
+    {
+      "id": "3",
+      "image": "gallery3.jpg",
+      "title": "Gallery 3"
+    },
+    {
+      "id": "4",
+      "image": "gallery4.jpg",
+      "title": "Gallery 4"
+    },
+    {
+      "id": "5",
+      "image": "gallery5.jpg",
+      "title": "Gallery 5"
+    },
+    {
+      "id": "6",
+      "image": "gallery6.jpg",
+      "title": "Gallery 6"
+    },
+    {
+      "id": "7",
+      "image": "gallery7.jpg",
+      "title": "Gallery 7"
+    },
+    {
+      "id": "8",
+      "image": "gallery8.jpg",
+      "title": "Gallery 8"
+    },
+    {
+      "id": "9",
+      "image": "gallery9.jpg",
+      "title": "Gallery 9"
+    },
+    {
+      "id": "10",
+      "image": "gallery10.jpg",
+      "title": "Gallery 10"
+    },
+    {
+      "id": "11",
+      "image": "gallery11.jpg",
+      "title": "Gallery 11"
+    },
+    {
+      "id": "12",
+      "image": "gallery12.jpg",
+      "title": "Gallery 12"
+    },
+    {
+      "id": "13",
+      "image": "gallery13.jpg",
+      "title": "Gallery 13"
+    },
+    {
+      "id": "14",
+      "image": "gallery14.jpg",
+      "title": "Gallery 14"
+    },
+    {
+      "id": "15",
+      "image": "gallery15.jpg",
+      "title": "Gallery 15"
+    },
+    {
+      "id": "16",
+      "image": "gallery16.jpg",
+      "title": "Gallery 16"
+    },
+    {
+      "id": "17",
+      "image": "gallery17.jpg",
+      "title": "Gallery 17"
+    },
+    {
+      "id": "18",
+      "image": "gallery18.jpg",
+      "title": "Gallery 18"
+    },
+    {
+      "id": "19",
+      "image": "gallery19.jpg",
+      "title": "Gallery 19"
+    },
+    {
+      "id": "20",
+      "image": "gallery20.jpg",
+      "title": "Gallery 20"
+    }
+  ],
+  "events": [
+    {
+      "id": "1",
+      "title": "Fitness Event 1",
+      "date": "2026-08-01",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "2",
+      "title": "Fitness Event 2",
+      "date": "2026-08-02",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "3",
+      "title": "Fitness Event 3",
+      "date": "2026-08-03",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "4",
+      "title": "Fitness Event 4",
+      "date": "2026-08-04",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "5",
+      "title": "Fitness Event 5",
+      "date": "2026-08-05",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "6",
+      "title": "Fitness Event 6",
+      "date": "2026-08-06",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "7",
+      "title": "Fitness Event 7",
+      "date": "2026-08-07",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    },
+    {
+      "id": "8",
+      "title": "Fitness Event 8",
+      "date": "2026-08-08",
+      "location": "Prowess Lift Gym",
+      "description": "Community fitness event."
+    }
+  ],
+  "faqs": [
+    {
+      "id": "1",
+      "question": "What are your opening hours?",
+      "answer": "5 AM to 10 PM daily."
+    },
+    {
+      "id": "2",
+      "question": "Do you offer free trials?",
+      "answer": "Yes, one free day pass."
+    },
+    {
+      "id": "3",
+      "question": "Are trainers certified?",
+      "answer": "Yes."
+    },
+    {
+      "id": "4",
+      "question": "Can I freeze membership?",
+      "answer": "Yes, up to 30 days."
+    },
+    {
+      "id": "5",
+      "question": "Is parking available?",
+      "answer": "Free parking."
+    },
+    {
+      "id": "6",
+      "question": "Do you have lockers?",
+      "answer": "Yes."
+    },
+    {
+      "id": "7",
+      "question": "Can beginners join?",
+      "answer": "Absolutely."
+    },
+    {
+      "id": "8",
+      "question": "Do you offer nutrition plans?",
+      "answer": "Yes."
+    },
+    {
+      "id": "9",
+      "question": "Are group classes included?",
+      "answer": "Depends on plan."
+    },
+    {
+      "id": "10",
+      "question": "How do I cancel?",
+      "answer": "Contact reception."
+    }
+  ],
+  "facilities": [
+    {
+      "id": "1",
+      "name": "Free WiFi",
+      "icon": "icon1.png"
+    },
+    {
+      "id": "2",
+      "name": "Locker",
+      "icon": "icon2.png"
+    },
+    {
+      "id": "3",
+      "name": "Sauna",
+      "icon": "icon3.png"
+    },
+    {
+      "id": "4",
+      "name": "Parking",
+      "icon": "icon4.png"
+    },
+    {
+      "id": "5",
+      "name": "Protein Bar",
+      "icon": "icon5.png"
+    },
+    {
+      "id": "6",
+      "name": "Shower",
+      "icon": "icon6.png"
+    },
+    {
+      "id": "7",
+      "name": "Cardio Zone",
+      "icon": "icon7.png"
+    },
+    {
+      "id": "8",
+      "name": "Weights",
+      "icon": "icon8.png"
+    },
+    {
+      "id": "9",
+      "name": "Studio",
+      "icon": "icon9.png"
+    },
+    {
+      "id": "10",
+      "name": "Recovery",
+      "icon": "icon10.png"
+    },
+    {
+      "id": "11",
+      "name": "Air Conditioning",
+      "icon": "icon11.png"
+    },
+    {
+      "id": "12",
+      "name": "Reception",
+      "icon": "icon12.png"
+    }
+  ],
+  "statistics": {
+    "members": 2500,
+    "trainers": 25,
+    "classes": 120,
+    "awards": 18
+  },
+  "socials": {
+    "facebook": "https://facebook.com/prowesslift",
+    "instagram": "https://instagram.com/prowesslift",
+    "youtube": "https://youtube.com/@prowesslift"
+  },
+  "contacts": {
+    "address": "123 Nguyen Van Linh, Can Tho",
+    "phone": "+84 987654321",
+    "email": "info@prowesslift.com"
+  },
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@gym.com",
+      "password": "123456",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "username": "kien",
+      "email": "kien@gmail.com",
+      "password": "123456",
+      "role": "member"
+    },
+    {
+      "id": "3",
+      "username": "guest",
+      "email": "guest@gmail.com",
+      "password": "123456",
+      "role": "member"
+    }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "name": "John Smith",
+      "email": "john@gmail.com",
+      "subject": "Membership Inquiry",
+      "message": "I want to know more about your Premium membership.",
+      "createdAt": "2026-06-30T09:30:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Emma Wilson",
+      "email": "emma@gmail.com",
+      "subject": "Personal Trainer",
+      "message": "Can I book a personal trainer next Monday?",
+      "createdAt": "2026-06-30T10:15:00Z"
+    }
+  ],
+  "video": [
+    {
+      "id": 1,
+      "title": "Full Body Workout",
+      "youtubeId": "UBMk30rjy0o",
+      "thumbnail": "https://img.youtube.com/vi/UBMk30rjy0o/maxresdefault.jpg",
+      "description": "30-minute full body workout for beginners."
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
