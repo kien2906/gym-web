@@ -14,7 +14,9 @@ import team3 from "../assets/team3.jpg";
 import { Home7 } from "./Home";
 import about1 from "../assets/about1.jpg";
 import about2 from "../assets/about2.jpg";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getVideos } from "../api/authApi";
+
 const About = () => {
   return (
     <>
@@ -205,12 +207,15 @@ const About4 = () => {
 };
 
 const About5 = () => {
-  // const []
+  const [video, setvideo] = useState(null);
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const data = await getVideos();
+      setvideo(data[0]);
+    };
 
-  // useEffect(()=>{
-  //     fetch("http://localhost:5000/video")
-
-  // })
+    fetchVideo();
+  }, []);
 
   return (
     <div>
@@ -234,9 +239,19 @@ const About5 = () => {
             Get Start Now
           </button>
           <div className="flex justify-center items-center  gap-4 ">
-            <button className="bg-[#7e7d7d]/80 p-5 rounded-full cursor-pointer flex items-center justify-center">
-              <FaPlay className="text-white text-lg" />
-            </button>
+            {video && (
+              <button
+                className="bg-[#7e7d7d]/80 p-5 rounded-full cursor-pointer flex items-center justify-center cursor-pointer"
+                onClick={() =>
+                  window.open(
+                    `https://www.youtube.com/watch?v=${video.youtubeId}`,
+                    "_blank",
+                  )
+                }
+              >
+                <FaPlay className="text-white text-lg" />
+              </button>
+            )}
             <p className="text-white pe-2.5 font-medium">Watch Video</p>
           </div>
         </div>
@@ -278,7 +293,7 @@ const About6 = () => {
           </div>
           <div className="relative group w-fit">
             <img src={team2} alt="" className="rounded-lg mb-5" />
-              <div className="absolute bottom-[90px] left-0 right-0 opacity-0  group-hover:opacity-100  transition duration-300 flex justify-center items-center gap-4  ">
+            <div className="absolute bottom-[90px] left-0 right-0 opacity-0  group-hover:opacity-100  transition duration-300 flex justify-center items-center gap-4  ">
               <div className="w-10 h-10 bg-gray-500/50 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition  hover:bg-white  group/icon">
                 {" "}
                 <FaFacebookF className="text-white  hover:text-teal-400  group-hover/icon:text-teal-400 " />
@@ -300,7 +315,7 @@ const About6 = () => {
           </div>
           <div className="relative group w-fit ">
             <img src={team3} alt="" className="rounded-lg mb-5" />
-              <div className="absolute bottom-[90px] left-0 right-0 opacity-0  group-hover:opacity-100  transition duration-300 flex justify-center items-center gap-4  ">
+            <div className="absolute bottom-[90px] left-0 right-0 opacity-0  group-hover:opacity-100  transition duration-300 flex justify-center items-center gap-4  ">
               <div className="w-10 h-10 bg-gray-500/50 rounded-full flex items-center justify-center cursor-pointer hover:scale-125 transition  hover:bg-white  group/icon">
                 {" "}
                 <FaFacebookF className="text-white  hover:text-teal-400  group-hover/icon:text-teal-400 " />
