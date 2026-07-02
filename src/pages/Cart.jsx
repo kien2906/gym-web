@@ -1,27 +1,32 @@
 import { useContext, useState } from "react";
 import { Cartproduct } from "../context/CartContext";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import { useDispatch, useSelector } from "react-redux";
+import { decreaseCart, increaseCart, removeCart } from "../feature/cartSlice";
 
 const Cart = () => {
-  const { addCart, clearCart, clearProduct, increase, descrease } = useContext(Cartproduct);
-
+  const { clearCart, clearProduct } =
+    useContext(Cartproduct);
   const [open, setOpen] = useState(null);
-
+  const [deleteId,setIdDelete] = useState(null)
+  const cart = useSelector((state) => state.cart.cartItem);
+const dispatch= useDispatch()
   const handOpen = (id) => {
-    setOpen(id);
+    setIdDelete(id)
+    setOpen(true);
+
   };
-  
 
   const handClose = () => {
-    setOpen(null);
+    setOpen(false);
   };
 
   const handeDelete = () => {
-    clearProduct(open);
-    setOpen(null);
+   dispatch(removeCart(deleteId))
+   setOpen(false)
   };
 
-  if (!addCart.length) {
+  if (!cart.length) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
@@ -31,15 +36,16 @@ const Cart = () => {
     );
   }
 
-  const totalPrice = addCart.reduce((sum, item) => {
-    return sum + (item.price * item.quantity || 0);
-  }, 0);
+   const totalPrice = cart.reduce((sum, item) => {
+     return sum + (item.price * item.quantity || 0);
+ }, 0);
 
   const getImageSrc = (image) => {
     if (!image) return null;
     if (image.startsWith("/") || image.startsWith("http")) return image;
     return `/images/${image.split("/").pop()}`;
   };
+
   return (
     <div className="min-h-screen py-10 px-5">
       <div className="max-w-4xl mx-auto">
@@ -60,7 +66,7 @@ const Cart = () => {
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-6 border">
           <div className="grid grid-cols-1 gap-6 ">
-            {addCart.map((item) => (
+            {cart.map((item) => (
               <div key={item.id} className="border-b pb-6 last:border-b-0">
                 <div className="flex gap-4">
                   {item.image && (
@@ -77,7 +83,7 @@ const Cart = () => {
                       </h3>
                       <button
                         className="px-5 py-2 bg-teal-400 shadow-md rounded-md cursor-pointer"
-                        onClick={() => handOpen(item.id)}
+                        onClick={() =>handOpen(item.id) }
                       >
                         {" "}
                         🗑️
@@ -85,14 +91,14 @@ const Cart = () => {
                     </div>
                     <div className="flex justify-start gap-2 items-center ">
                       <button
-                        onClick={() => increase(item.id)}
+                        onClick={() => dispatch(increaseCart(item.id))}
                         className="px-4 py-2 bg-teal-300 rounded-md flex items-center  cursor-pointer"
                       >
                         +
                       </button>
                       <p>{item.quantity}</p>
                       <button
-                        onClick={() => descrease(item.id)}
+                        onClick={() => dispatch(decreaseCart(item.id))}
                         className={`px-4 py-2 rounded-md flex items-center cursor-pointer
                           ${item.quantity === 0 ? "bg-teal-100" : "bg-teal-300 "}
                         `}
@@ -116,7 +122,7 @@ const Cart = () => {
           <div className="text-right">
             <p className="text-gray-600 mb-2">
               Tổng số sản phẩm:{" "}
-              <span className="font-bold text-lg">{addCart.length}</span>
+              <span className="font-bold text-lg">{cart.length}</span>
             </p>
             <p className="text-2xl font-bold text-teal-600">
               Tổng tiền: ${totalPrice.toFixed(2)}

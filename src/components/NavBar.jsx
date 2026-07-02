@@ -1,21 +1,14 @@
 import { Search, Moon, Sun } from "lucide-react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { Cartproduct } from "../context/CartContext";
-import { FaSignInAlt } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
+  const cart = useSelector(state => state.cart.cartItem);
 
-  const navgitive = useNavigate();
-  const { addCart } = useContext(Cartproduct);
-  const handLogout = () => {
-    localStorage.clear();
-
-    navgitive("/login");
-  };
   //Prowess Lift
   return (
     <div>
@@ -91,7 +84,7 @@ const NavBar = ({ darkMode, handClick }) => {
                     <FaShoppingCart className="text-xl" />
 
                     <div className="absolute bottom-5 left-7 flex h-6 w-6 items-center justify-center rounded-full bg-teal-400 text-sm text-white">
-                      {addCart?.length || 0}
+                      {cart.length || 0}
                     </div>
                   </div>
                 </Link>

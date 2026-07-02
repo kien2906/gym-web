@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { Cartproduct } from "../context/CartContext";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { addtoCart } from "../feature/cartSlice";
+import { getClasses } from "../api/authApi";
 const Classes1 = () => {
   return (
     <div className="bg-gray-500 py-20 h-full text-center">
@@ -16,24 +17,15 @@ const Classes1 = () => {
 
 function Classess() {
   const [classes, setClasses] = useState([]);
-  const { handAddCart } = useContext(Cartproduct);
-  const token = localStorage.getItem("token");
-
+const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetch("http://localhost:5000/classes")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
-        return res.json();
+    const fetchClasses = async () => {
+      const data = await getClasses();
+      setClasses(data);
+    };
 
-      })
-      .then((data) => {
-        setClasses(data || []);
-      })
-      .catch((error) => {
-        console.error("Failed to load classes:", error);
-      });
+    fetchClasses();
   }, []);
 
   const getImageSrc = (image) => {
@@ -80,7 +72,7 @@ function Classess() {
                   </p>
 
                   <button
-                    onClick={() => handAddCart(product)}
+                    onClick={() => dispatch(addtoCart(product))}
                     className="mt-4 px-4 py-2 rounded w-full bg-teal-500 hover:bg-teal-600 font-bold text-white cursor-pointer"
                   >
                     Add to Cart
