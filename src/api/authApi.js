@@ -1,4 +1,5 @@
-import { data } from "react-router-dom";
+
+import axios from "axios";
 import axiosClient from "./axiosClient";
 
 const authApi = {
@@ -13,15 +14,11 @@ const authApi = {
   
 };
 
-const getClasses = async () => {
-  const res = await axiosClient.get("http://localhost:5000/classes");
-  return res.data
-};
 
 const getVideos = async () => {
-  const res = await axiosClient.get("http://localhost:5000/video");
+  const res = await axios.get("http://localhost:4000/video");
   return res.data
 };
 
 export default authApi;
-export {getClasses,getVideos}
+export {getVideos}

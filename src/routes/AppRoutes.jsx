@@ -13,6 +13,7 @@ import Cart from "../pages/Cart";
 import Resgister from "../pages/Resgister";
 import { AnimatePresence } from "framer-motion";
 import Profile from "../pages/Profile";
+import ClassesDetail from "../pages/ClassesDetail";
 function AppRoutes() {
 
 
@@ -20,7 +21,8 @@ function AppRoutes() {
   const hideFooter = location.pathname === "/login" || location.pathname==="/register";
   const {darkMode, handleDarkMode} =useContext(Theme)
   return (
-    <AnimatePresence>
+    <>
+
       <NavBar darkMode={darkMode} handClick={handleDarkMode} />
 
       <main className="mt-25">
@@ -33,6 +35,7 @@ function AppRoutes() {
            <Route path="/Cart" element={<Cart/>}/>
            <Route path="/register" element={<Resgister/>}/>
            <Route path="/profile" element={<Profile/>}/>
+           <Route path="/classes/:id" element={<ClassesDetail />} />
         </Routes>
       </main>
 
@@ -41,9 +44,10 @@ function AppRoutes() {
           <Footer darkMode={darkMode} />
         </footer>
       )}
-    </AnimatePresence>
+    </>
   );
 }
 
 export default AppRoutes;
 
+    ///cách cũ của react router

@@ -7,9 +7,7 @@ import ThemeContext from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <ThemeContext>
-      {" "}
+
       <App />
-    </ThemeContext>
   </BrowserRouter>,
 );
