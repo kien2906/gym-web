@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addtoCart } from "../feature/cartSlice";
-import { getClasses } from "../api/authApi";
+import getClasses from "../api/apiClassess";
 const Classes1 = () => {
   return (
     <div className="bg-gray-500 py-20 h-full text-center">
@@ -16,6 +16,7 @@ const Classes1 = () => {
 };
 
 function Classess() {
+  const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
 const token = localStorage.getItem("token");
   const dispatch = useDispatch();
@@ -53,10 +54,11 @@ const token = localStorage.getItem("token");
                 <div
                   key={product.id}
                   className="border p-6 rounded-lg shadow-md hover:shadow-lg transition-colors bg-white"
+                
                 >
-                  <div className="relative">
+                  <div className="relative"  onClick={() => navigate(`/classes/${product.id}`)}>
                     <img
-                      src={getImageSrc(product.image)}
+                      src={getImageSrc(product.image) }
                       alt={product.name || "class"}
                       className="w-full h-48 object-cover rounded-md"
                     />
@@ -120,3 +122,6 @@ const token = localStorage.getItem("token");
 }
 
 export default Classess;
+// useNavigate dùng để chuyẻn sang url khác
+
+// useNavigate và useParam thường đi chung với nhau

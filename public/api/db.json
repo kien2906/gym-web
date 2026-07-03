@@ -3,85 +3,85 @@
     {
       "id": "1",
       "name": "Fitness",
-      "description": "Fitness training program.",
+      "description": "Build overall strength, improve endurance, and maintain a healthy lifestyle through full-body workouts suitable for all fitness levels.",
       "image": "../images/home6_1.jpg",
       "price": 220
     },
     {
       "id": "2",
       "name": "CrossFit",
-      "description": "CrossFit training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "High-intensity functional training that combines weightlifting, cardio, and bodyweight exercises to maximize performance.",
+      "image": "../images/home6_2.jpg",
       "price": 240
     },
     {
       "id": "3",
       "name": "Yoga",
-      "description": "Yoga training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Enhance flexibility, improve posture, reduce stress, and achieve better balance through guided yoga sessions.",
+      "image": "../images/home6_3.jpg",
       "price": 260
     },
     {
       "id": "4",
       "name": "Zumba",
-      "description": "Zumba training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "An energetic dance fitness class featuring Latin-inspired music and fun choreography to burn calories.",
+      "image": "../images/home6_4.jpg",
       "price": 280
     },
     {
       "id": "5",
       "name": "Pilates",
-      "description": "Pilates training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Strengthen your core, improve flexibility, and develop better body alignment with controlled movements.",
+      "image": "../images/home6_5.jpg",
       "price": 300
     },
     {
       "id": "6",
       "name": "Boxing",
-      "description": "Boxing training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Boost speed, power, and endurance while learning boxing techniques in challenging full-body workouts.",
+      "image": "../images/home6_6.jpg",
       "price": 320
     },
     {
       "id": "7",
       "name": "HIIT",
-      "description": "HIIT training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Short bursts of intense exercise followed by recovery periods to maximize fat burning and cardiovascular fitness.",
+      "image": "../images/home6_7.jpg",
       "price": 340
     },
     {
       "id": "8",
       "name": "Cardio",
-      "description": "Cardio training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Improve heart health and stamina with treadmill, cycling, rowing, and aerobic exercises for all levels.",
+      "image": "../images/home6_8.jpg",
       "price": 360
     },
     {
       "id": "9",
       "name": "Strength",
-      "description": "Strength training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Focus on muscle growth and functional strength using free weights, resistance machines, and compound exercises.",
+      "image": "../images/home6_9.jpg",
       "price": 380
     },
     {
       "id": "10",
       "name": "Functional",
-      "description": "Functional training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Train movements that improve balance, coordination, mobility, and everyday physical performance.",
+      "image": "../images/home6_10.jpg",
       "price": 400
     },
     {
       "id": "11",
       "name": "Cycling",
-      "description": "Cycling training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "High-energy indoor cycling sessions designed to improve endurance, burn calories, and strengthen your legs.",
+      "image": "../images/home6_11.jpg",
       "price": 420
     },
     {
       "id": "12",
       "name": "Kickboxing",
-      "description": "Kickboxing training program.",
-      "image": "../images/home6_1.jpg",
+      "description": "Combine martial arts techniques with cardio exercises to build confidence, agility, and total-body strength.",
+      "image": "../images/home6_12.jpg",
       "price": 440
     }
   ],
