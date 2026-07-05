@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addtoCart } from "../feature/cartSlice";
-import getClasses from "../api/apiClassess";
+import getClasses from "../services/apiClassess";
 import { Search } from "lucide-react";
 const Classes1 = () => {
   return (
@@ -28,7 +28,7 @@ function Classess() {
       const data = await getClasses();
       setClasses(data);
       //phải set result  khi fetch api nếu kho set thì khi load trang lại thì resluts rỗng
-       setResult(data)
+      setResult(data);
     };
 
     fetchClasses();
@@ -125,7 +125,8 @@ function Classess() {
           ) : result.length > 0 ? (
             <>
               {result.map((product) => (
-                <div
+                <Link
+                  to={`/classes/${product.id}`}
                   key={product.id}
                   className="border p-6 rounded-lg shadow-md hover:shadow-lg transition-colors bg-white"
                   onClick={() => navigate(`/classes/${product.id}`)}
@@ -152,7 +153,7 @@ function Classess() {
                       Add to cart
                     </button>
                   </Link>
-                </div>
+                </Link>
               ))}
             </>
           ) : (

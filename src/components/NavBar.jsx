@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const cart = useSelector(state => state.cart.cartItem);
+  const cart = useSelector((state) => state.cart.cartItem);
 
   //Prowess Lift
   return (
@@ -56,6 +56,30 @@ const NavBar = ({ darkMode, handClick }) => {
             >
               Classes
             </Link>
+            <li>
+              <Link
+                to="/trainers"
+                className={
+                  location.pathname === "/trainers"
+                    ? "text-teal-400"
+                    : "hover:text-teal-400 text-gray-500"
+                }
+              >
+                Trainers
+              </Link>
+            </li>
+                 <li>
+              <Link
+                to="/testimonials"
+                className={
+                  location.pathname === "/testimonials"
+                    ? "text-teal-400"
+                    : "hover:text-teal-400 text-gray-500"
+                }
+              >
+                Testimonials
+              </Link>
+            </li>
 
             <li>
               <Link
@@ -106,12 +130,12 @@ const NavBar = ({ darkMode, handClick }) => {
                   Login
                 </Link>
               ) : (
-                <Link to="/profile"
-             
-                >
+                <Link to="/profile">
                   <li>
-                    <div className="flex items-center gap-3 " >
-                      <FaUserCircle className={`text-3xl text-gray-600 cursor-pointertransition   ${location.pathname==="/profile" ?"text-teal-500 " : "hover:text-teal-400"} `} />
+                    <div className="flex items-center gap-3 ">
+                      <FaUserCircle
+                        className={`text-3xl text-gray-600 cursor-pointertransition   ${location.pathname === "/profile" ? "text-teal-500 " : "hover:text-teal-400"} `}
+                      />
                     </div>
                   </li>
                 </Link>

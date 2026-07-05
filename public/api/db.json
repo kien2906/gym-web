@@ -277,6 +277,20 @@
       "rating": 5,
       "comment": "Great gym, friendly staff and modern equipment.",
       "image": "client10.jpg"
+    },
+    {
+      "id": "gS5Hm1mFsiY",
+      "name": "Member 7",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client7.jpg"
+    },
+    {
+      "id": "ugnKP-LP7sA",
+      "name": "Member 7",
+      "rating": 4,
+      "comment": "Great gym, friendly staff and modern equipment.",
+      "image": "client7.jpg"
     }
   ],
   "blogs": [

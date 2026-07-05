@@ -8,7 +8,7 @@ import {
   Sparkles,
   ShoppingBag,
 } from "lucide-react";
-import { getClassesId } from "../api/apiClassess";
+import { getClassesId } from "../services/apiClassess";
 import { useDispatch } from "react-redux";
 import { addtoCart } from "../feature/cartSlice";
 function ClassesDetail() {
