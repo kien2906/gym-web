@@ -1,63 +1,48 @@
-import React, { useContext, useState } from "react";
-import authApi from "../api/authApi";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { Theme } from "../context/ThemeContext";
+
 import InputCommon from "../components/InputCommon";
+import { loginUser } from "../feature/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
-  const { darkMode } = useContext(Theme);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+  const dispatch = useDispatch();
+  const { loading, error,message } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setloading] = useState(false);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [formError, setFormError] = useState({});
+
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let error = {};
+    const errors = {
+      email: "",
+      password: "",
+    };
 
-    if (!form.email) {
-      error.email = "Email not null";
-    }
+    if (!form.email.trim()) errors.email = "Email is required";
+    if (!form.password.trim()) errors.password = "Password is required";
 
-    if (!form.password) {
-      error.password = "Password not null";
-    }
+    setFormError(errors);
 
-    setTimeout(() => {
-      setError({});
-    }, 2000);
+    if (errors.email || errors.password) return;
 
-    setError(error);
     try {
-      setloading(true);
-      const res = await authApi.login({
-        email: form.email,
-        password: form.password,
-      });
+      const data = await dispatch(loginUser(form)).unwrap();
 
-      if (res.status === 200) {
-        localStorage.setItem("token", res.data.result.token);
-        localStorage.setItem("user", JSON.stringify(res.data.result.user));
+      localStorage.setItem("token", data.result.token);
+      localStorage.setItem("user", JSON.stringify(data.result.user));
 
-        navigate("/");
-      } else {
-        setMessage("Tài khoản chưa đăng kí");
-        setTimeout(() => {
-          setMessage("");
-        }, 3000);
-      }
-
-      console.log(res.data);
+      navigate("/");
     } catch (err) {
-      console.log(err);
-    } finally {
-      setloading(false);
+      console.log("Login failed", err);
     }
   };
 
@@ -66,7 +51,6 @@ function Login() {
       ...form,
       [e.target.name]: e.target.value,
     });
-    console.log(form);
   };
   return (
     <>
@@ -90,7 +74,7 @@ function Login() {
                   handChange: handChange,
                 }}
               />
-              <span className="text-red-500 text-sm">{error.email}</span>
+              <span className="text-red-500 text-sm">{formError.email}</span>
 
               <div className="flex justify-start items-center w-full relative">
                 <InputCommon
@@ -106,6 +90,7 @@ function Login() {
                 />
 
                 <button
+                  type="button"
                   className="absolute right-4 "
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -113,8 +98,8 @@ function Login() {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
-              <span className="text-red-500 text-sm">{error.password}</span>
-              <span className="text-red-500 text-sm">{message}</span>
+              <span className="text-red-500 text-sm">{formError.password}</span>
+
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 text-sm text-[#7e7d7d]">
                   <input type="checkbox" className="accent-teal-400" /> Remember
@@ -124,6 +109,18 @@ function Login() {
                   Forgot password?
                 </a>
               </div>
+
+              {error && (
+                <p className="text-sm text-red-500">
+                  Invalid email or password
+                </p>
+              )}
+
+              
+                <p >
+                 {message}
+                </p>
+         
 
               <button
                 className="bg-teal-400 hover:bg-teal-600 disabled:opacity-60 text-white py-3 rounded-md font-bold transition cursor-pointer"

@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "../api/axiosClient";
 import axios from "axios";
 const getClasses = async () => {
   const res = await axios.get("http://localhost:4000/classes");

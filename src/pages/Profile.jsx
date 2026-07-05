@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
   const nav = useNavigate();
   const handLogout = () => {
     localStorage.clear();

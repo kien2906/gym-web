@@ -24,28 +24,30 @@ function CartContext({ children }) {
     setAddCart((pre) => pre.filter((p) => p.id !== id));
   };
 
-const increase = (id) => {
-  setAddCart(
-    addCart.map((item) =>
-      item.id === id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    )
-  );
-};
-const descrease= (id) =>{
-setAddCart(
-  addCart.map((t)=>(
-   t.id === id ? {...t,quantity: t.quantity -1 } : t
-    
-  ))
-)
-
-
-}
+  const increase = (id) => {
+    setAddCart(
+      addCart.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      ),
+    );
+  };
+  const descrease = (id) => {
+    setAddCart(
+      addCart.map((t) =>
+        t.id === id ? { ...t, quantity: t.quantity - 1 } : t,
+      ),
+    );
+  };
   return (
     <Cartproduct.Provider
-      value={{ handAddCart, addCart, clearCart, clearProduct ,increase,descrease}}
+      value={{
+        handAddCart,
+        addCart,
+        clearCart,
+        clearProduct,
+        increase,
+        descrease,
+      }}
     >
       {children}
     </Cartproduct.Provider>

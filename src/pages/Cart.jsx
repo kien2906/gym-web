@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Sparkles, Trash2 } from "lucide-react";
-import { Cartproduct ,addCart} from "../context/CartContext";
+import { Cartproduct }from "../context/CartContext";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import { decreaseCart, increaseCart, removeCart,clearAllCart } from "../feature/cartSlice";
@@ -36,10 +36,7 @@ const Cart = () => {
   const totalPrice = cart.reduce((sum, item) => {
     return sum + (item.price * item.quantity || 0);
   }, 0);
-  const tottal= addCart.reduce((sum,item)=>{
-    sum+item.price * item.quantity
-  },0)
-
+ 
   // const shipping = totalPrice > 0 && totalPrice < 200 ? 15 : 0;
   // const discount = totalPrice >= 200 ? 20 : 0;
   // const finalTotal = Math.max(0, totalPrice + shipping - discount);
