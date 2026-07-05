@@ -57,7 +57,7 @@ const Concact2 = () => {
 
 
     try {
-      const response = await fetch("http://localhost:5000/messages", {
+      const response = await fetch("http://localhost:4000/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
