@@ -149,42 +149,62 @@
       "name": "Basic",
       "price": 29,
       "duration": "Monthly",
-      "features": ["Gym Access", "Locker", "WiFi"]
+      "features": [
+        "Gym Access",
+        "Locker",
+        "WiFi"
+      ]
     },
     {
       "id": "2",
       "name": "Standard",
       "price": 49,
       "duration": "Monthly",
-      "features": ["Basic", "Group Classes", "Cardio"]
+      "features": [
+        "Basic",
+        "Group Classes",
+        "Cardio"
+      ]
     },
     {
       "id": "3",
       "name": "Premium",
       "price": 79,
       "duration": "Monthly",
-      "features": ["Standard", "PT", "Sauna"]
+      "features": [
+        "Standard",
+        "PT",
+        "Sauna"
+      ]
     },
     {
       "id": "4",
       "name": "Student",
       "price": 19,
       "duration": "Monthly",
-      "features": ["Gym Access"]
+      "features": [
+        "Gym Access"
+      ]
     },
     {
       "id": "5",
       "name": "Family",
       "price": 99,
       "duration": "Monthly",
-      "features": ["4 Members", "Classes"]
+      "features": [
+        "4 Members",
+        "Classes"
+      ]
     },
     {
       "id": "6",
       "name": "Annual",
       "price": 699,
       "duration": "Yearly",
-      "features": ["Premium", "2 Months Free"]
+      "features": [
+        "Premium",
+        "2 Months Free"
+      ]
     }
   ],
   "reviews": [
@@ -670,11 +690,18 @@
       "subject": "Personal Trainer",
       "message": "Can I book a personal trainer next Monday?",
       "createdAt": "2026-06-30T10:15:00Z"
+    },
+    {
+      "name": "ád",
+      "email": "KienTTT.ce190462@gMAIL.COM",
+      "subject": "ád",
+      "message": "asssssssssssssssssssssssss",
+      "id": "d52nkpz2M68"
     }
   ],
   "video": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Full Body Workout",
       "youtubeId": "UBMk30rjy0o",
       "thumbnail": "https://img.youtube.com/vi/UBMk30rjy0o/maxresdefault.jpg",

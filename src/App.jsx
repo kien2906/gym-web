@@ -6,16 +6,18 @@ import AppRoutes from "./routes/AppRoutes";
 import { Provider } from "react-redux";
 function App() {
   return (
+    <Provider store={store}>
     <ThemeContext>
       {" "}
       <CartContext>
         {" "}
-        <Provider store={store}>
+        
           {" "}
           <AppRoutes />
-        </Provider>
+     
       </CartContext>
     </ThemeContext>
+       </Provider>
   );
 }
 
