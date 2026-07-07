@@ -13,7 +13,7 @@ function Login() {
   });
 
   const dispatch = useDispatch();
-  const { loading, error,message } = useSelector((state) => state.auth);
+  const { loading, error, message } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState({});
 
@@ -39,8 +39,12 @@ function Login() {
 
       localStorage.setItem("token", data.result.token);
       localStorage.setItem("user", JSON.stringify(data.result.user));
-
-      navigate("/");
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user?.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       console.log("Login failed", err);
     }
@@ -116,11 +120,7 @@ function Login() {
                 </p>
               )}
 
-              
-                <p >
-                 {message}
-                </p>
-         
+              <p>{message}</p>
 
               <button
                 className="bg-teal-400 hover:bg-teal-600 disabled:opacity-60 text-white py-3 rounded-md font-bold transition cursor-pointer"
