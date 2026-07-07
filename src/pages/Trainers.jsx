@@ -5,18 +5,22 @@ import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import getTrainers from "../services/apiTrainer";
 import { Link }from "react-router-dom";
+import { useGetTrainersQuery } from "../feature/trainers";
+import { useDispatch } from "react-redux";
 
 function Trainers() {
-  const [trainers, setTrainers] = useState([]);
-  useEffect(() => {
-    const fetchTrainers = async () => {
-      const data = await getTrainers();
-      setTrainers(data);
-    };
 
-    fetchTrainers();
-  }, []);
-  console.log(trainers);
+   const { data, isLoading, error } = useGetTrainersQuery();
+  // const [trainers, setTrainers] = useState([]);
+  // useEffect(() => {
+  //   const fetchTrainers = async () => {
+  //     const data = await getTrainers();
+  //     setTrainers(data);
+  //   };
+
+  //   fetchTrainers();
+  // }, []);
+  // console.log(trainers);
   return (
     <div>
       <section className="bg-gray-700 py-20 text-center text-white">
@@ -49,7 +53,7 @@ function Trainers() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {trainers.map((trainer) => (
+          {data?.map((trainer) => (
             <Link
               to={`/trainers/${trainer.id}`}
               key={trainer.name}

@@ -11,12 +11,14 @@ import Concact from "../pages/Contact";
 import Classess from "../pages/Classess";
 import Cart from "../pages/Cart";
 import Resgister from "../pages/Resgister";
-import { AnimatePresence } from "framer-motion";
+
 import Profile from "../pages/Profile";
 import ClassesDetail from "../pages/ClassesDetail";
 import Trainers from "../pages/Trainers";
 import Testimonials from "../pages/Testimonials";
 import TrainersDetail from "../pages/TrainersDetail";
+import Admin from "../pages/admin/Admin";
+
 function AppRoutes() {
   const location = useLocation();
   const hideFooter =
@@ -37,6 +39,7 @@ function AppRoutes() {
           <Route path="/Cart" element={<Cart />} />
           <Route path="/register" element={<Resgister />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin/>} />
           <Route path="/trainers" element={<Trainers />} />
           <Route path="/trainers/:id" element={<TrainersDetail />} />
           <Route path="/testimonials" element={<Testimonials />} />

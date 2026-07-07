@@ -4,10 +4,11 @@ import getReviews from "../services/apiReview";
 
 function Testimonials() {
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
+
   const [reviews, setReviews] = useState([]);
   const [hover, setHover] = useState(0);
   const [rating, setRating] = useState(0);
+    const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     const fetchReviews = async () => {
       const data = await getReviews();
@@ -47,10 +48,10 @@ function Testimonials() {
             />
             <input
               type="text"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
+              value={user?.role}
+            
               placeholder="Your role"
-              className="rounded-lg border border-gray-300 p-3 outline-none focus:border-teal-500"
+              className="rounded-lg border border-gray-300 p-3 outline-none focus:border-teal-500 bg-gray-300 text-white "
               readOnly
               disabled={true}
             />

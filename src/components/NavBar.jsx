@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
   const cart = useSelector((state) => state.cart.cartItem);
 
   //Prowess Lift
@@ -68,7 +69,7 @@ const NavBar = ({ darkMode, handClick }) => {
                 Trainers
               </Link>
             </li>
-                 <li>
+            <li>
               <Link
                 to="/testimonials"
                 className={
@@ -94,7 +95,9 @@ const NavBar = ({ darkMode, handClick }) => {
               </Link>
             </li>
 
-            {token && (
+            {token && user?.role === "admin" ? (
+              ""
+            ) : (
               <li>
                 <Link
                   to="/Cart"
@@ -128,6 +131,16 @@ const NavBar = ({ darkMode, handClick }) => {
                   className={`text-gray-500 hover:text-teal-400 ${location.pathname === "/login" ? "text-teal-500" : "text-gray-500 hover:text-teal-500"}`}
                 >
                   Login
+                </Link>
+              ) : user?.role === "admin" ? (
+                <Link to="/admin">
+                  <li>
+                    <div className="flex items-center gap-3 ">
+                      <FaUserCircle
+                        className={`text-3xl text-gray-600 cursor-pointertransition   ${location.pathname === "/profile" ? "text-teal-500 " : "hover:text-teal-400"} `}
+                      />
+                    </div>
+                  </li>
                 </Link>
               ) : (
                 <Link to="/profile">
