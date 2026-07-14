@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 import InputCommon from "../components/InputCommon";
-import { loginUser } from "../feature/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import {  useLoginMutation } from "../feature/authSlice";
+
+
+// import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
   const [form, setForm] = useState({
@@ -12,11 +14,11 @@ function Login() {
     password: "",
   });
 
-  const dispatch = useDispatch();
-  const { loading, error, message } = useSelector((state) => state.auth);
+  const [loginUser, { isLoading }] = useLoginMutation();
+  // const { loading, error, message } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState({});
-
+  const [mess, setMess] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -31,26 +33,35 @@ function Login() {
     if (!form.password.trim()) errors.password = "Password is required";
 
     setFormError(errors);
+    setMess("");
 
     if (errors.email || errors.password) return;
 
     try {
-      const data = await dispatch(loginUser(form)).unwrap();
+      const data = await loginUser(form).unwrap();
+      console.log(data)
+      console.log(data.message);
 
-      localStorage.setItem("token", data.result.token);
-      localStorage.setItem("user", JSON.stringify(data.result.user));
+      setMess(data.message);
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+     
       const user = JSON.parse(localStorage.getItem("user"));
+
       if (user?.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/");
       }
     } catch (err) {
+      setMess(err?.data?.message);
       console.log("Login failed", err);
     }
   };
 
   const handChange = (e) => {
+    setMess("");
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -114,19 +125,19 @@ function Login() {
                 </a>
               </div>
 
-              {error && (
-                <p className="text-sm text-red-500">
-                  Invalid email or password
+              {mess && (
+                <p
+                  className={`text-sm ${mess.toLowerCase().includes("success") ? "text-green-600" : "text-red-500"}`}
+                >
+                  {mess}
                 </p>
               )}
 
-              <p>{message}</p>
-
               <button
                 className="bg-teal-400 hover:bg-teal-600 disabled:opacity-60 text-white py-3 rounded-md font-bold transition cursor-pointer"
-                disabled={loading}
+                disabled={isLoading}
               >
-                {loading ? "Sign in..." : "Sign in"}
+                {isLoading ? "SIGN IN..." : "Sign in"}
               </button>
             </form>
 

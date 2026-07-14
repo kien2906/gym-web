@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -8,30 +7,41 @@ import {
   Sparkles,
   ShoppingBag,
 } from "lucide-react";
-import { getClassesId } from "../services/apiClassess";
 import { useDispatch } from "react-redux";
 import { addtoCart } from "../feature/cartSlice";
+import { useGetClassIdQuery } from "../feature/class";
+
 function ClassesDetail() {
   const { id } = useParams();
-  const [classes, setClasses] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { data, error, isLoading } = useGetClassIdQuery(id);
+  const classItem = data?.class ?? data;
+  const schedule = classItem?.schedule
+    ? Array.isArray(classItem.schedule)
+      ? classItem.schedule
+      : [classItem.schedule]
+    : [];
+
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
   const nav = useNavigate();
-  console.log(token);
-  useEffect(() => {
-    const fetchClass = async () => {
-      setLoading(true);
 
-      const data = await getClassesId(id);
-      setClasses(data);
-      setLoading(false);
-    };
+  const formatTime = (value) => {
+    if (!value) return "";
+    if (typeof value !== "string") return String(value);
+    const normalized = value.includes("T") ? value : `1970-01-01T${value}`;
+    const date = new Date(normalized);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
-    fetchClass();
-  }, [id]);
+  const handleAddToCart = () => {
+    dispatch(addtoCart(classItem));
+  };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50 px-4 py-12">
         <div className="mx-auto max-w-6xl animate-pulse rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -64,9 +74,9 @@ function ClassesDetail() {
         <div className="mt-6 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="overflow-hidden rounded-[28px] border border-gray-100 bg-gray-50">
             <img
-              src={classes?.image}
-              alt={classes?.name}
-              className="h-full min-h-[320px] w-full object-cover"
+              src={`http://localhost:3001/uploads/${data?.class.image}`}
+              alt={data?.class?.name}
+              className=" h-[420px] w-full  object-cover"
             />
           </div>
 
@@ -78,11 +88,38 @@ function ClassesDetail() {
               </div>
 
               <h1 className="mt-4 text-3xl font-bold text-gray-800 sm:text-4xl">
-                {classes?.name}
+                {classItem?.name}
               </h1>
               <p className="mt-4 text-base leading-7 text-gray-600">
-                {classes?.description}
+                {classItem?.description}
               </p>
+
+              {schedule?.length > 0 && (
+                <div className="mt-6 rounded-3xl border border-teal-100 bg-teal-50/80 p-4 text-sm text-gray-700">
+                  <p className="mb-3 font-semibold text-teal-700">Lịch học</p>
+
+                  <div className="space-y-3">
+                    {schedule.map((item) => (
+                      <div
+                        key={item.id}
+                        className="rounded-2xl bg-white p-3 shadow-sm"
+                      >
+                        <p className="font-medium">{item.day}</p>
+
+                        <p className="text-sm text-gray-500">
+                          {item.startTime
+                            ? `Bắt đầu: ${formatTime(item.startTime)}`
+                            : ""}
+
+                          {item.endTime
+                            ? ` • Kết thúc: ${formatTime(item.endTime)}`
+                            : ""}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="mt-6 space-y-3 text-sm text-gray-600">
                 <div className="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3">
@@ -110,9 +147,9 @@ function ClassesDetail() {
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-teal-600">
                     Giá khóa học
                   </p>
-                  <p className="mt-1 text-3xl font-bold text-gray-800">
+                  {/* <p className="mt-1 text-3xl font-bold text-gray-800">
                     ${classes?.price}
-                  </p>
+                  </p> */}
                 </div>
                 <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-gray-600 shadow-sm">
                   Ưu đãi hôm nay
@@ -121,11 +158,10 @@ function ClassesDetail() {
               {token ? (
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                   <button
-                    className="flex items-center justify-center gap-2 rounded-2xl bg-teal-500 px-5 py-3 font-semibold text-white transition hover:bg-teal-600"
-                    onClick={() => dispatch(addtoCart(classes.id))}
+                    className={`flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold text-white transition `}
+                    onClick={handleAddToCart}
                   >
                     <ShoppingBag size={18} />
-                    Thêm vào giỏ
                   </button>
                   <button className="rounded-2xl border border-teal-200 bg-white px-5 py-3 font-semibold text-teal-600 transition hover:bg-teal-50">
                     Đăng ký ngay

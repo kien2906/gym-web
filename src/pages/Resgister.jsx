@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import authApi from "../api/authApi";
+import Register from "../services/apiRegister";
 import InputCommon from "../components/InputCommon";
 function Resgister() {
   const [form, setForm] = useState({
-    name: "",
+    fullName: "",
     email: "",
+    phone: "",
     gender: "",
     password: "",
-    confirmPassword: "",
   });
   const navigate = useNavigate();
 
   const [error, setError] = useState({
-    name: "",
+    fullName: "",
     email: "",
     gender: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -24,12 +25,16 @@ function Resgister() {
 
     const newError = {};
 
-    if (!form.name) {
-      newError.name = "Name cannot be empty";
+    if (!form.fullName) {
+      newError.fullName = "Name cannot be empty";
     }
 
     if (!form.email) {
       newError.email = "Email cannot be empty";
+    }
+
+    if (!form.phone) {
+      newError.phone = "Phone cannot be empty";
     }
 
     if (!form.gender) {
@@ -50,31 +55,33 @@ function Resgister() {
       newError.confirmPassword = "Incorrect password confirmation";
     }
 
-    setTimeout(() => {
-      setError({});
-    }, 5000);
-    setError(newError);
-
+    if (Object.keys(newError).length > 0) {
+      return;
+    }
     try {
-      const res = await authApi.register({
-        name: form.name,
+      const res = await Register({
+        fullName: form.fullName,
         email: form.email,
-        gender: form.gender,
         password: form.password,
+        phone: form.phone,
+        gender: form.gender,
       });
       console.log(res.data);
-
-      if (res.status === 201) {
+// localStorage.setItem("token", res?.token);
+// localStorage.setItem("user", JSON.stringify(res?.user));
+      if (res.success) {
         navigate("/login");
       } else {
         setError(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.res?.status);
+      console.log(error.res?.data);
+      console.log(error.message);
     }
   };
 
-  const handChagne = (e) => {
+  const handChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -92,12 +99,13 @@ function Resgister() {
           <form className="flex flex-col gap-4" onSubmit={handSubmit}>
             <InputCommon
               props={{
+                name: "fullName",
                 type: "text",
-                placeholder: "Username",
-                name: form.name,
-                handChange: handChagne,
+                placeholder: "Full Name",
+                value: form.fullName,
                 classname:
                   "rounded-md p-4 outline-none border border-slate-200",
+                handChange: handChange,
               }}
             />
 
@@ -109,13 +117,27 @@ function Resgister() {
               props={{
                 type: "email",
                 placeholder: "Email",
-                name: form.email,
-                handChange: handChagne,
+                name: "email",
+                value: form.email,
+                handChange: handChange,
                 classname:
                   "rounded-md p-4 outline-none border border-slate-200",
               }}
             />
             <span className="text-red-500 text-sm">{error && error.email}</span>
+
+            <InputCommon
+              props={{
+                type: "text",
+                placeholder: "Phone",
+                name: form.phone,
+                handChange: handChange,
+                classname:
+                  "rounded-md p-4 outline-none border border-slate-200",
+              }}
+            />
+            <span className="text-red-500 text-sm">{error && error.phone}</span>
+
             <select
               name="gender"
               onChange={(e) =>
@@ -127,9 +149,9 @@ function Resgister() {
               className="rounded-md p-4 outline-none border border-slate-200 text-gray-500"
             >
               <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
             </select>
             <span className="text-red-500 text-sm">
               {error && error.gender}
@@ -138,10 +160,11 @@ function Resgister() {
             <div className="relative">
               <InputCommon
                 props={{
-                  type: "email",
+                  type: "text",
                   placeholder: "Password",
-                  name: form.password,
-                  handChange: handChagne,
+                  name: "password",
+                  value: form.password,
+                  handChange: handChange,
                   classname:
                     "rounded-md p-4 outline-none border border-slate-200 w-full",
                 }}
@@ -159,8 +182,7 @@ function Resgister() {
               <InputCommon
                 props={{
                   placeholder: "Confirm Password",
-                  name: form.confirmPassword,
-                  handChange: handChagne,
+                  handChange: handChange,
                   classname:
                     "rounded-md p-4 outline-none border border-slate-200 w-full",
                 }}
