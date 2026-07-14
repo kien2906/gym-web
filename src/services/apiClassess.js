@@ -11,4 +11,4 @@ const getClassesId = async (id) => {
 };
 
 export default getClasses;
-export {getClassesId}
+export { getClassesId };

@@ -95,10 +95,8 @@ const NavBar = ({ darkMode, handClick }) => {
               </Link>
             </li>
 
-            {token && user?.role === "admin" ? (
-              ""
-            ) : (
-              <li>
+            {token && user?.role ==="user"  ? (
+                 <li>
                 <Link
                   to="/Cart"
                   className={
@@ -116,7 +114,10 @@ const NavBar = ({ darkMode, handClick }) => {
                   </div>
                 </Link>
               </li>
+            ) : (
+                ""
             )}
+    
 
             <li>
               <Search />

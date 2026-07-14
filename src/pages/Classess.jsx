@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addtoCart } from "../feature/cartSlice";
-import getClasses from "../services/apiClassess";
-import { Search } from "lucide-react";
+
+import { Search, ShoppingBag } from "lucide-react";
+import { useGetClassQuery } from "../feature/class";
 const Classes1 = () => {
   return (
     <div className="bg-gray-500 py-20 h-full text-center">
@@ -18,34 +19,28 @@ const Classes1 = () => {
 
 function Classess() {
   const navigate = useNavigate();
-  const [classes, setClasses] = useState([]);
   const [search, setSearch] = useState("");
-  const [result, setResult] = useState([]);
   const token = localStorage.getItem("token");
+  const { data, isLoading, error } = useGetClassQuery();
+  const [result, setResult] = useState([]);
   const dispatch = useDispatch();
+  console.log(data);
+
+
   useEffect(() => {
-    const fetchClasses = async () => {
-      const data = await getClasses();
-      setClasses(data);
-      //phải set result  khi fetch api nếu kho set thì khi load trang lại thì resluts rỗng
-      setResult(data);
-    };
-
-    fetchClasses();
-  }, []);
-
-  const getImageSrc = (image) => {
-    const fileName = image.split("/").pop();
-    return `/images/${fileName}`;
-  };
+    if (data?.classes) {
+      setResult(data.classes);
+    }
+  }, [data]);
 
   const handSearch = () => {
-    const searchClasses = classes.filter((p) =>
+    const searchClasses = data?.classes?.filter((p) =>
       p.name.toLowerCase().includes(search.toLowerCase()),
     );
-    console.log(searchClasses);
+
     setResult(searchClasses);
   };
+
 
   return (
     <div className="h-full mt-30">
@@ -81,39 +76,55 @@ function Classess() {
       <div className="w-full flex justify-center p-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl w-full ">
           {token ? (
-            result.length > 0 ? (
+            result?.length > 0 ? (
               <>
                 {result?.map((product) => (
                   <div
                     key={product.id}
-                    className="border p-6 rounded-lg shadow-md hover:shadow-lg transition-colors bg-white"
+                    className="flex h-full flex-col overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(20,184,166,0.16)]"
                   >
                     <div
-                      className="relative"
-                      onClick={() => navigate(`/classes/${product.id}`)}
+                      className="relative cursor-pointer overflow-hidden"
+                      onClick={() => navigate(`/classes/${product?._id}`)}
                     >
                       <img
-                        src={getImageSrc(product.image)}
+                        src={`http://localhost:3001/uploads/${product.image}`}
                         alt={product.name || "class"}
-                        className="w-full h-48 object-cover rounded-md"
+                        className="h-40 w-full object-cover transition duration-500 hover:scale-105"
                       />
-                      <div className="absolute top-3 left-3 bg-teal-600 text-white px-3 py-1 rounded">
+                      <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-teal-700 shadow-sm">
                         ${product.price}
+                      </div>
+                      <div className="absolute bottom-3 left-3 rounded-full bg-teal-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                        Hot
                       </div>
                     </div>
 
-                    <h2 className="font-bold text-xl mt-3">{product.name}</h2>
+                    <div className="flex flex-1 flex-col p-5">
+                      <h2 className="text-xl font-bold text-gray-800">
+                        {product.name}
+                      </h2>
 
-                    <p className="text-gray-500 mt-2 text-sm h-16 overflow-hidden">
-                      {product.description}
-                    </p>
+                      <p className="mt-2 h-16 overflow-hidden text-sm leading-6 text-gray-500">
+                        {product.description}
+                      </p>
 
-                    <button
-                      onClick={() => dispatch(addtoCart(product))}
-                      className="mt-4 px-4 py-2 rounded w-full bg-teal-500 hover:bg-teal-600 font-bold text-white cursor-pointer"
-                    >
-                      Add to Cart
-                    </button>
+                      <div className="mt-4 flex items-center gap-2">
+                        <button
+                          onClick={() => dispatch(addtoCart(product))}
+                          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-2.5 font-semibold text-white transition hover:opacity-90"
+                        >
+                          <ShoppingBag size={16} />
+                          Thêm vào giỏ
+                        </button>
+                        <button
+                           onClick={() => navigate(`/classes/${product?._id}`)}
+                          className="rounded-2xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                        >
+                          Xem
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </>
@@ -122,38 +133,50 @@ function Classess() {
                 <p className="text-xl font-semibold">Không tìm thấy sản phẩm</p>
               </div>
             )
-          ) : result.length > 0 ? (
+          ) : result?.length > 0 ? (
             <>
-              {result.map((product) => (
-                <Link
-                  to={`/classes/${product.id}`}
+              {result?.map((product) => (
+                <div
                   key={product.id}
-                  className="border p-6 rounded-lg shadow-md hover:shadow-lg transition-colors bg-white"
-                  onClick={() => navigate(`/classes/${product.id}`)}
+                  className="flex h-full flex-col overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(20,184,166,0.16)]"
                 >
-                  <div className="relative">
+                  <div
+                    className="relative cursor-pointer overflow-hidden"
+                  onClick={() => navigate(`/classes/${product?._id}`)}
+                  >
                     <img
-                      src={getImageSrc(product.image)}
+                      src={`http://localhost:3001/uploads/${product?.image}`}
                       alt={product.name || "class"}
-                      className="w-full h-48 object-cover rounded-md"
+                      className="h-40 w-full object-cover transition duration-500 hover:scale-105"
                     />
-                    <div className="absolute top-3 left-3 bg-teal-600 text-white px-3 py-1 rounded">
+                    <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-teal-700 shadow-sm">
                       ${product.price}
+                    </div>
+                    <div className="absolute bottom-3 left-3 rounded-full bg-teal-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
+                      New
                     </div>
                   </div>
 
-                  <h2 className="font-bold text-xl mt-3">{product.name}</h2>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h2 className="text-xl font-bold text-gray-800">
+                      {product.name}
+                    </h2>
 
-                  <p className="text-gray-500 mt-2 text-sm h-16 overflow-hidden">
-                    {product.description}
-                  </p>
+                    <p className="mt-2 h-16 overflow-hidden text-sm leading-6 text-gray-500">
+                      {product.description}
+                    </p>
 
-                  <Link to="/login">
-                    <button className="mt-4 px-4 py-2 rounded w-full bg-teal-500 hover:bg-teal-600 font-bold text-white cursor-pointer">
-                      Add to cart
-                    </button>
-                  </Link>
-                </Link>
+                    <div className="mt-4">
+                      <button
+                        onClick={() => navigate("/login")}
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-2.5 font-semibold text-white transition hover:opacity-90"
+                      >
+                        <ShoppingBag size={16} />
+                        Đăng nhập để thêm
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
             </>
           ) : (
