@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutaccount } from "../feature/authSlice";
-import { useUpdateProfileMutation } from "../feature/profile";
+import { useUpdateProfileMutation } from "../feature/profileApi";
 import { FaCamera } from "react-icons/fa";
 function Profile() {
   const dispatch = useDispatch();

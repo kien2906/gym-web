@@ -4,13 +4,16 @@ import { FaUserCircle } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
 import { useSelector } from "react-redux";
+import { useGetCartQuery } from "../feature/cartSlice";
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem("user") || "null");
   const cart = useSelector((state) => state.cart.cartItem);
+ const {data} = useGetCartQuery()
+ const cartItemCount = data?.cart.items.length
 
-  //Prowess Lift
+  // Prowess Lift
   return (
     <div>
       <div
@@ -109,7 +112,7 @@ const NavBar = ({ darkMode, handClick }) => {
                     <FaShoppingCart className="text-xl" />
 
                     <div className="absolute bottom-5 left-7 flex h-6 w-6 items-center justify-center rounded-full bg-teal-400 text-sm text-white">
-                      {cart.length || 0}
+                      {cartItemCount || 0}
                     </div>
                   </div>
                 </Link>

@@ -15,12 +15,12 @@ import { Home7 } from "./Home";
 import about1 from "../assets/about1.jpg";
 import about2 from "../assets/about2.jpg";
 import { useEffect, useState } from "react";
-
+import Breadcrumb from "../components/Breadcrumb";
 
 const About = () => {
   return (
     <>
-      <About1 />
+      <Breadcrumb name="About" />
       <About2 />
       <About3 />
       <About4 />
@@ -31,17 +31,6 @@ const About = () => {
   );
 };
 
-const About1 = () => {
-  return (
-    <div className="bg-gray-500 py-20 h-full text-center">
-      <div className="flex justify-center gap-5 text-xl items-center">
-        <span className="font-bold text-teal-400">Home</span>
-        <span className="text-white font-bold">{">"}</span>
-        <span className="font-bold text-white">About Us</span>
-      </div>
-    </div>
-  );
-};
 const About2 = () => {
   return (
     <div className="container mx-auto grid grid-cols-[35%_65%] py-10">

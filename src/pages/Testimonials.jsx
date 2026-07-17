@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaQuoteLeft, FaStar } from "react-icons/fa";
-import getReviews from "../services/apiReview";
+
 
 function Testimonials() {
   const [name, setName] = useState("");
@@ -9,14 +9,7 @@ function Testimonials() {
   const [hover, setHover] = useState(0);
   const [rating, setRating] = useState(0);
     const user = JSON.parse(localStorage.getItem("user"));
-  useEffect(() => {
-    const fetchReviews = async () => {
-      const data = await getReviews();
-      setReviews(data);
-    };
 
-    fetchReviews();
-  }, []);
   console.log(reviews);
   return (
     <div className="bg-gray-50 py-20">

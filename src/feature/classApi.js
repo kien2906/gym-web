@@ -12,4 +12,4 @@ export const Class = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetClassQuery, useGetClassIdQuery} = Class;
+export const { useGetClassQuery, useGetClassIdQuery } = Class;

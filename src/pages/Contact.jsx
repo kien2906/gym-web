@@ -1,25 +1,14 @@
 import { useState } from "react";
+import Breadcrumb from "../components/Breadcrumb";
 
 function Concact() {
   return (
     <div className="">
-      <Concact1 />
+      <Breadcrumb name="Contact"/>
       <Concact2 />
     </div>
   );
 }
-
-const Concact1 = () => {
-  return (
-    <div className="bg-gray-500 py-20 h-full text-center">
-      <div className="flex justify-center gap-5 text-xl items-center">
-        <span className="font-bold text-teal-400">Home</span>
-        <span className="text-white font-bold">{">"}</span>
-        <span className="font-bold text-white">Contact</span>
-      </div>
-    </div>
-  );
-};
 
 const Concact2 = () => {
   const [form, setForm] = useState({
