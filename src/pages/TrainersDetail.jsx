@@ -1,19 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { getTrainersId } from "../services/apiTrainer";
+
 
 function TrainersDetail() {
   const { id } = useParams();
   const [trainer, setTrainer] = useState(null);
 
-  useEffect(() => {
-    const fetchTrainer = async () => {
-      const data = await getTrainersId(id);
-      setTrainer(data);
-    };
-    fetchTrainer();
-  }, [id]);
 
   if (!trainer) {
     return <div className="px-6 py-20 text-center text-gray-600">Loading...</div>;

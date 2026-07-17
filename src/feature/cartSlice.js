@@ -1,4 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { baseApi } from "../services/baseApi";
+import { body } from "framer-motion/m";
+
+export const profile = baseApi.injectEndpoints({
+  endpoints: (builer) => ({
+    updateProfile: builer.mutation({
+      query: (data) => ({
+        url: "/users/profile",
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+  }),
+});
+
+export const { useUpdateProfileMutation } = profile;
 
 const initialState = {
   cartItem: [],
@@ -48,10 +64,24 @@ export const {
   decreaseCart,
   clearAllCart,
 } = cartSlice.actions;
-export const selectCartItems = (state) => state.cart.cartItem;
-export const selectCartTotal = (state) =>
-  state.cart.cartItem.reduce(
-    (sum, item) => sum + item.price * (item.quantity || 0),
-    0,
-  );
+
+const addtoCartApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    addCarts: builder.mutation({
+      query: (data) => ({
+        url: "/cart",
+        method: "POST",
+        body: data,
+      }),
+        invalidatesTags: ["Cart"],
+    }),
+    getCart: builder.query({
+      query: () => "/cart",
+      providesTags: ["Cart"],
+    }),
+  }),
+});
+
+export const { useAddCartsMutation, useGetCartQuery } = addtoCartApi;
+
 export default cartSlice.reducer;

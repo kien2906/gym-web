@@ -1,17 +1,17 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Sparkles, Trash2 } from "lucide-react";
-import { Cartproduct }from "../context/CartContext";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
-import { useDispatch, useSelector } from "react-redux";
-import { decreaseCart, increaseCart, removeCart,clearAllCart } from "../feature/cartSlice";
+import { useGetCartQuery } from "../feature/cartSlice";
 
 const Cart = () => {
  
   const [open, setOpen] = useState(null);
   const [deleteId, setIdDelete] = useState(null);
-  const cart = useSelector((state) => state.cart.cartItem);
-  const dispatch = useDispatch();
+  // const cart = useSelector((state) => state.cart.cartItem);
+  const {data} = useGetCartQuery()
+  const listCart=data?.cart?.items;
+   console.log(data?.cart?.items)
 
   const handOpen = (id) => {
     setIdDelete(id);
@@ -22,10 +22,7 @@ const Cart = () => {
     setOpen(false);
   };
 
-  const handeDelete = () => {
-    dispatch(removeCart(deleteId));
-    setOpen(false);
-  };
+
 
   const getImageSrc = (image) => {
     if (!image) return null;
@@ -33,15 +30,15 @@ const Cart = () => {
     return `/images/${image.split("/").pop()}`;
   };
 
-  const totalPrice = cart.reduce((sum, item) => {
-    return sum + (item.price * item.quantity || 0);
-  }, 0);
+  // const totalPrice = cart.reduce((sum, item) => {
+  //   return sum + (item.price * item.quantity || 0);
+  // }, 0);
  
   // const shipping = totalPrice > 0 && totalPrice < 200 ? 15 : 0;
   // const discount = totalPrice >= 200 ? 20 : 0;
   // const finalTotal = Math.max(0, totalPrice + shipping - discount);
 
-  if (!cart.length) {
+  if (!data?.cart?.items.length) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50 px-4 py-16">
         <div className="max-w-3xl mx-auto rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-sm">
@@ -98,12 +95,12 @@ const Cart = () => {
                     Sản phẩm trong giỏ
                   </h2>
                   <p className="text-sm text-gray-500">
-                    {cart.length} khoá học đã chọn
+                    {/* {cart.length} khoá học đã chọn */}
                   </p>
                 </div>
               </div>
               <button
-                onClick={()=>dispatch(clearAllCart())}
+          
                 className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-50 cursor-pointer"
               >
                 Xoá tất cả
@@ -111,15 +108,15 @@ const Cart = () => {
             </div>
 
             <div className="space-y-4">
-              {cart.map((item) => (
+              {listCart?.map((item) => (
                 <div
-                  key={item.id}
+                  key={item?.class._id}
                   className="flex flex-col gap-4 rounded-2xl border border-gray-100 p-4 transition hover:shadow-md sm:flex-row"
                 >
-                  {item.image ? (
+                  {item?.class?.image ? (
                     <img
-                      src={getImageSrc(item.image)}
-                      alt={item.name}
+                    src={`http://localhost:3001/uploads/${item.class.image}`}
+                      alt={item?.class.name}
                       className="h-24 w-full rounded-2xl object-cover sm:h-28 sm:w-28"
                     />
                   ) : (
@@ -132,24 +129,19 @@ const Cart = () => {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="text-lg font-semibold text-gray-800">
-                          {item.name}
+                          {item?.class?.name}
                         </h3>
                         <p className="mt-1 text-sm text-gray-500">
-                          {item.description}
+                         {item.class.description}
                         </p>
                       </div>
-                      <button
-                        className="rounded-full p-2 text-gray-400 transition hover:bg-red-50 hover:text-red-500"
-                        onClick={() => handOpen(item.id)}
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                    
                     </div>
 
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center overflow-hidden rounded-full border border-gray-200">
                         <button
-                          onClick={() => dispatch(decreaseCart(item.id))}
+                       
                           className={`flex h-10 w-10 items-center justify-center text-lg transition ${
                             item.quantity === 0
                               ? "cursor-not-allowed bg-gray-100 text-gray-300"
@@ -163,7 +155,7 @@ const Cart = () => {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => dispatch(increaseCart(item.id))}
+                     
                           className="flex h-10 w-10 items-center justify-center bg-teal-500 text-lg text-white transition hover:bg-teal-600"
                         >
                           <Plus size={16} />
@@ -173,7 +165,7 @@ const Cart = () => {
                       <div className="text-right">
                         <p className="text-sm text-gray-500">Đơn giá</p>
                         <p className="text-lg font-bold text-teal-600">
-                          ${(item.price * item.quantity).toFixed(2)}
+                        {(item.class.price * item.quantity).toLocaleString("vi-VN")} VND
                         </p>
                       </div>
                     </div>
@@ -196,7 +188,7 @@ const Cart = () => {
             <div className="mt-5 space-y-3 text-sm text-gray-600">
               <div className="flex items-center justify-between">
                 <span>Tạm tính</span>
-                <span>${totalPrice.toFixed(2)}</span>
+                <span>$</span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Phí vận chuyển</span>
@@ -212,7 +204,7 @@ const Cart = () => {
 
             <div className="flex items-center justify-between text-lg font-semibold text-gray-800">
               <span>Tổng tiền</span>
-              <span className="text-teal-600">${totalPrice}</span>
+              <span className="text-teal-600">$</span>
             </div>
 
             <button className="mt-6 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-3 font-semibold text-white shadow-md transition hover:opacity-90">
@@ -227,7 +219,7 @@ const Cart = () => {
       </div>
 
       {open && (
-        <ConfirmDeleteModal onCancel={handClose} onConfirm={handeDelete} />
+        <ConfirmDeleteModal onCancel={handClose}  />
       )}
     </div>
   );

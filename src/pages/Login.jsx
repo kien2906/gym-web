@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 import InputCommon from "../components/InputCommon";
-import {  useLoginMutation } from "../feature/authSlice";
-
+import { useLoginMutation } from "../feature/authSlice";
 
 // import { useDispatch, useSelector } from "react-redux";
 
@@ -39,14 +38,14 @@ function Login() {
 
     try {
       const data = await loginUser(form).unwrap();
-      console.log(data)
+      console.log(data);
       console.log(data.message);
 
       setMess(data.message);
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-     
+      localStorage.setItem("user", JSON.stringify(data?.user));
+
       const user = JSON.parse(localStorage.getItem("user"));
 
       if (user?.role === "admin") {

@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import getTrainers from "../services/apiTrainer";
+
 import { baseApi } from "../services/baseApi";
 // export const fetch = createAsyncThunk("api/trainer", async () => {
 //  const res = await getTrainers();
@@ -27,15 +26,13 @@ import { baseApi } from "../services/baseApi";
 
 // })
 
-
 export const trainerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getTrainers: builder.query({
-      query: () => "trainers",
+      query: () => "/trainer",
     }),
   }),
 });
 
-export const {useGetTrainersQuery}= trainerApi
+export const { useGetTrainersQuery } = trainerApi;
 // export default trainers.reducer
-

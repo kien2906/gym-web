@@ -6,12 +6,13 @@ import home4 from "../assets/anhhome4.jpg";
 import home6_1 from "../assets/home6_1.jpg";
 import home6_2 from "../assets/home6_2.jpg";
 import home6_3 from "../assets/home6_3.jpg";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useMemo } from "react";
 
 import reviews from "../data.js";
 import { Link } from "react-router-dom";
 import { Theme } from "../context/ThemeContext.jsx";
 import InputCommon from "../components/InputCommon.jsx";
+import { p } from "framer-motion/m";
 // const { darkMode, handleDarkMode } = useContext(Theme);
 const Home = () => {
   return (
@@ -435,34 +436,139 @@ const Home7 = () => {
 
 const Home8 = () => {
   const { darkMode } = useContext(Theme);
-  const [current, setCurrent] = useState(0);
+  const [error, setError] = useState("");
+  // Bạn có thể đổi tên state hoặc thêm state mới tùy logic của bạn, ở đây mình giữ nguyên state 'current' làm ví dụ
+  const [bmi, setBmi] = useState({
+    height: "",
+    weight: "",
+  });
+
+  const [result, setResult] = useState({
+    bmi: null,
+    status: "",
+  });
+
+  const handChange = (e) => {
+    const { name, value } = e.target;
+    setBmi((pre) => ({
+      ...pre,
+      [name]: value,
+    }));
+  };
+
+  const handleCalculate = () => {
+    const h = bmi.height;
+    const w = bmi.weight;
+
+    if (!h.length || !w.length) {
+      setError("Please enter your height and weight.");
+      return;
+    }
+
+    if (h < 50 || h > 250) {
+      setError("Height must be between 50 cm and 250 cm.");
+      return;
+    }
+
+    if (w < 10 || w > 500) {
+      setError("Weight must be between 10 kg and 500 kg.");
+      return;
+    }
+    const bmiValue = w / Math.pow(h, 2);
+
+    let status;
+
+    if (bmiValue < 18.5) {
+      status = "Underweight";
+    } else if (bmiValue < 25) {
+      status = "Normal";
+    } else if (bmiValue < 30) {
+      status = "Overweight";
+    } else {
+      status = "Obese";
+    }
+    console.log(bmiValue);
+    setError("");
+    setResult({
+      bmi: bmiValue.toFixed(4),
+      status,
+    });
+  };
+
   return (
     <div
-      className={`flex flex-col items-center justify-center py-10 w-full ${darkMode ? "bg-black text-white" : "bg-white"}`}
+      className={`flex flex-col items-center justify-center py-10 w-full min-h-screen ${
+        darkMode ? "bg-black text-white" : "bg-white text-gray-800"
+      }`}
     >
-      <p className="text-gray-500 text-md font-bold">Testimonials</p>
-      <h2 className="font-bold text-4xl py-2  ">What our Clients say</h2>
-      <img
-        src={reviews[current].image}
-        className="w-40 h-40 rounded-full object-cover p-5"
-        alt="logo"
-      />
-      <p className="text-gray-500 w-[1000px] text-center m-5 text-xl">
-        {reviews[current].review}
+      {/* Tiêu đề */}
+      <p className="text-teal-500 text-md font-bold uppercase tracking-wider">
+        Health Tool
       </p>
-      <p className="font-bold">{reviews[current].name}</p>
-      <p className="text-gray-400">Example Name</p>
+      <h2 className="font-bold text-4xl py-2 mb-6">BMI Calculator</h2>
 
-      <div className="flex gap-3 mt-4 justify-center py-3">
-        {reviews.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrent(index)}
-            className={`w-3 h-3 rounded-full ${
-              current === index ? "bg-teal-400" : "bg-gray-400"
+      {/* Form tính BMI */}
+      <div
+        className={`w-full max-w-md p-6 rounded-2xl shadow-lg border ${
+          darkMode
+            ? "bg-zinc-900 border-zinc-800"
+            : "bg-gray-50 border-gray-200"
+        }`}
+      >
+        {/* Input Chiều cao */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Height (cm)</label>
+          <input
+            name="height"
+            value={bmi.height}
+            onChange={handChange}
+            type="number"
+            placeholder="e.g. 170"
+            className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-400 ${
+              darkMode
+                ? "bg-zinc-800 border-zinc-700 text-white placeholder-gray-500"
+                : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
             }`}
-          ></button>
-        ))}
+          />
+        </div>
+
+        {/* Input Cân nặng */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-2">Weight (kg)</label>
+          <input
+            value={bmi.weight}
+            name="weight"
+            onChange={handChange}
+            type="number"
+            placeholder="e.g. 60"
+            className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-400 ${
+              darkMode
+                ? "bg-zinc-800 border-zinc-700 text-white placeholder-gray-500"
+                : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+            }`}
+          />
+        </div>
+
+        {/* Nút Tính Toán */}
+        <button
+          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 dynamic-btn cursor-pointer"
+          onClick={handleCalculate}
+        >
+          Calculate BMI
+        </button>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        {/* Khu vực hiển thị kết quả (Bạn tự bind logic vào đây nhé) */}
+        <div
+          className={`mt-6 p-4 rounded-xl text-center ${
+            darkMode ? "bg-zinc-800" : "bg-gray-200/60"
+          }`}
+        >
+          <p className="text-sm text-gray-400 font-medium">Your BMI Score</p>
+          <p className="text-3xl font-bold text-teal-400 my-1">
+            {result.bmi ?? "0.0"}{" "}
+          </p>
+          <p className="font-semibold text-sm">Status: {result.status}</p>
+        </div>
       </div>
     </div>
   );

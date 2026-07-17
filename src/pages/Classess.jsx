@@ -1,31 +1,22 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addtoCart } from "../feature/cartSlice";
+import { useAddCartsMutation } from "../feature/cartSlice";
 
 import { Search, ShoppingBag } from "lucide-react";
-import { useGetClassQuery } from "../feature/class";
-const Classes1 = () => {
-  return (
-    <div className="bg-gray-500 py-20 h-full text-center">
-      <div className="flex justify-center gap-5 text-xl items-center">
-        <span className="font-bold text-teal-400">Home</span>
-        <span className="text-white font-bold">{">"}</span>
-        <span className="font-bold text-white">Classes</span>
-      </div>
-    </div>
-  );
-};
+import { useGetClassQuery } from "../feature/classApi";
+import Breadcrumb from "../components/Breadcrumb";
 
 function Classess() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const token = localStorage.getItem("token");
-  const { data, isLoading, error } = useGetClassQuery();
+  const { data, isLoading: isClassLoading, error } = useGetClassQuery();
+
+  const [addCart, { isLoading: isAddingCart }] = useAddCartsMutation();
   const [result, setResult] = useState([]);
   const dispatch = useDispatch();
-  console.log(data);
-
+  // console.log(data);
 
   useEffect(() => {
     if (data?.classes) {
@@ -37,91 +28,232 @@ function Classess() {
     const searchClasses = data?.classes?.filter((p) =>
       p.name.toLowerCase().includes(search.toLowerCase()),
     );
-
     setResult(searchClasses);
   };
 
+  const handAddCart = async (classId) => {
+    try {
+      const res = await addCart({
+        classId,
+        quantity: 1,
+      }).unwrap();
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(data?.classes.trainer);
 
   return (
-    <div className="h-full mt-30">
-      <Classes1 />
-      <div className="text-center mb-5 mt-5 w-3xl mx-auto">
-        <p className="text-gray-400">Discover something new</p>
-        <h1 className="font-bold text-4xl">Fun Classes</h1>
-        <p className="text-gray-500 max-w-2xl mx-auto mt-2">
-          Browse our curated selection of fun, hands-on classes — click "Add to
-          Cart" to select a class for checkout.
-        </p>
+    <div className="min-h-screen bg-[#FAFAFA] text-slate-800 font-sans antialiased pb-20 mt-16 md:mt-20">
+      <Breadcrumb name="Classes" />
 
-        <div className="flex justify-center gap-5">
-          {" "}
-          <input
-            type="text"
-            placeholder="search..."
-            className="w-full border p-2"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handSearch();
-              }
-            }}
-          />
-          <button onClick={handSearch}>
-            <Search />
-          </button>
+      {/* HEADER & FILTERS SECTION */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200/60 pb-8">
+          <div className="max-w-xl">
+            <p className="text-xs font-semibold text-teal-700 uppercase tracking-widest mb-2">
+              Discover something new
+            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              Fun & Professional Classes
+            </h1>
+            <p className="text-sm text-slate-500 mt-2 leading-relaxed font-light">
+              Browse our curated selection of fun, hands-on classes — click "Add
+              to Cart" to select a class for checkout.
+            </p>
+          </div>
+
+          {/* PREMIUM SEARCH BOX */}
+          <div className="w-full md:w-80 shrink-0">
+            <div className="relative flex items-center border border-slate-300 focus-within:border-teal-700 bg-white transition-colors duration-150 rounded-sm overflow-hidden">
+              <input
+                type="text"
+                placeholder="Tìm khóa học của bạn..."
+                className="w-full px-4 py-2.5 text-sm text-slate-800 bg-transparent focus:outline-none placeholder:text-slate-400 font-light"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handSearch();
+                  }
+                }}
+              />
+              <button
+                onClick={handSearch}
+                className="px-4 py-2.5 text-slate-400 hover:text-teal-700 active:text-teal-800 transition-colors border-l border-slate-100"
+                aria-label="Search button"
+              >
+                <Search size={16} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="w-full flex justify-center p-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl w-full ">
-          {token ? (
-            result?.length > 0 ? (
+      {/* SKELETON LOADING STATE */}
+      {isClassLoading && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3].map((n) => (
+            <div
+              key={n}
+              className="animate-pulse bg-white border border-slate-200/60 p-4 space-y-4 rounded-sm"
+            >
+              <div className="bg-slate-200 h-44 w-full rounded-sm" />
+              <div className="h-5 bg-slate-200 w-2/3 rounded-sm" />
+              <div className="h-12 bg-slate-200 w-full rounded-sm" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ERROR HANDLING STATE */}
+      {error && (
+        <div className="max-w-md mx-auto px-4 text-center py-12">
+          <p className="text-sm text-rose-600 font-medium">
+            Đã xảy ra lỗi khi tải danh sách khóa học. Vui lòng thử lại sau.
+          </p>
+        </div>
+      )}
+
+      {/* COURSE GRID SYSTEM */}
+      {!isClassLoading && !error && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+            {token ? (
+              result?.length > 0 ? (
+                <>
+                  {result?.map((product) => (
+                    <div
+                      key={product.id || product._id}
+                      className="group flex flex-col bg-white border border-slate-200/60 rounded-sm hover:border-slate-300 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.01)]"
+                    >
+                      {/* Image Preview Card */}
+                      <div
+                        className="relative cursor-pointer aspect-video w-full bg-slate-900 overflow-hidden border-b border-slate-100"
+                        onClick={() => navigate(`/classes/${product?._id}`)}
+                      >
+                        <img
+                          src={`http://localhost:3001/uploads/${product.image}`}
+                          alt={product.name || "class"}
+                          className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-[1.02]"
+                          onError={(e) => {
+                            e.target.src =
+                              "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80";
+                          }}
+                        />
+                        <div className="absolute left-3 top-3 bg-white/95 text-slate-900 px-2.5 py-1 text-xs font-bold border border-slate-200 shadow-sm rounded-sm">
+                          {product.price
+                            ? `${product.price.toLocaleString("vi-VN")}đ`
+                            : "Free"}
+                        </div>
+                        <div className="absolute bottom-3 left-3 bg-teal-700 text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm">
+                          Hot
+                        </div>
+                      </div>
+
+                      {/* Content Info Card */}
+                      <div className="flex flex-1 flex-col p-5">
+                        <h2
+                          className="text-base font-bold text-slate-900 group-hover:text-teal-800 transition-colors cursor-pointer line-clamp-1"
+                          onClick={() => navigate(`/classes/${product?._id}`)}
+                        >
+                          {product.name}
+                        </h2>
+
+                        <p className="mt-2 text-xs leading-relaxed text-slate-500 font-light line-clamp-3 mb-4 flex-1">
+                          {product.description}
+                        </p>
+
+                        <div className="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100">
+                          {isAddingCart ? (
+                            <button
+                              disabled
+                              className="flex flex-1 items-center justify-center gap-2 bg-gray-500 px-4 py-2.5 text-xs font-medium text-white rounded-sm"
+                            >
+                              <ShoppingBag size={14} />
+                              Đang thêm...
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handAddCart(product._id)}
+                              className="flex flex-1 items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 active:bg-teal-900 px-4 py-2.5 text-xs font-medium text-white rounded-sm shadow-sm"
+                            >
+                              <ShoppingBag size={14} />
+                              Thêm vào giỏ hàng
+                            </button>
+                          )}
+                          <button
+                            onClick={() => navigate(`/classes/${product?._id}`)}
+                            className="border border-slate-300 hover:bg-slate-50 active:bg-slate-100 px-4 py-2.5 text-xs font-medium text-slate-700 transition-colors duration-150 rounded-sm"
+                          >
+                            Xem chi tiết
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <div className="col-span-full flex justify-center items-center min-h-[40vh] border border-dashed border-slate-200 bg-white rounded-sm">
+                  <p className="text-sm font-light text-slate-400">
+                    Không tìm thấy sản phẩm phù hợp.
+                  </p>
+                </div>
+              )
+            ) : result?.length > 0 ? (
               <>
                 {result?.map((product) => (
                   <div
-                    key={product.id}
-                    className="flex h-full flex-col overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(20,184,166,0.16)]"
+                    key={product.id || product._id}
+                    className="group flex flex-col bg-white border border-slate-200/60 rounded-sm hover:border-slate-300 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.01)]"
                   >
+                    {/* Image Preview Card */}
                     <div
-                      className="relative cursor-pointer overflow-hidden"
+                      className="relative cursor-pointer aspect-video w-full bg-slate-900 overflow-hidden border-b border-slate-100"
                       onClick={() => navigate(`/classes/${product?._id}`)}
                     >
                       <img
-                        src={`http://localhost:3001/uploads/${product.image}`}
+                        src={`http://localhost:3001/uploads/${product?.image}`}
                         alt={product.name || "class"}
-                        className="h-40 w-full object-cover transition duration-500 hover:scale-105"
+                        className="w-full h-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-[1.02]"
+                        onError={(e) => {
+                          e.target.src =
+                            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80";
+                        }}
                       />
-                      <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-teal-700 shadow-sm">
-                        ${product.price}
+                      <div className="absolute left-3 top-3 bg-white/95 text-slate-900 px-2.5 py-1 text-xs font-bold border border-slate-200 shadow-sm rounded-sm">
+                        {product.price
+                          ? `${product.price.toLocaleString("vi-VN")}đ`
+                          : "Free"}
                       </div>
-                      <div className="absolute bottom-3 left-3 rounded-full bg-teal-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                        Hot
+                      <div className="absolute bottom-3 left-3 bg-teal-700 text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm">
+                        New
                       </div>
                     </div>
 
+                    {/* Content Info Card */}
                     <div className="flex flex-1 flex-col p-5">
-                      <h2 className="text-xl font-bold text-gray-800">
+                      <h2
+                        className="text-base font-bold text-slate-900 group-hover:text-teal-800 transition-colors cursor-pointer line-clamp-1"
+                        onClick={() => navigate(`/classes/${product?._id}`)}
+                      >
                         {product.name}
                       </h2>
 
-                      <p className="mt-2 h-16 overflow-hidden text-sm leading-6 text-gray-500">
+                      <p className="mt-2 text-xs leading-relaxed text-slate-500 font-light line-clamp-3 mb-4 flex-1">
                         {product.description}
                       </p>
 
-                      <div className="mt-4 flex items-center gap-2">
+                      <div className="mt-auto pt-4 border-t border-slate-100">
                         <button
-                          onClick={() => dispatch(addtoCart(product))}
-                          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-2.5 font-semibold text-white transition hover:opacity-90"
+                          onClick={() => navigate("/login")}
+                          className="flex w-full items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 active:bg-teal-900 px-4 py-2.5 text-xs font-medium text-white transition-colors duration-150 rounded-sm shadow-sm"
                         >
-                          <ShoppingBag size={16} />
-                          Thêm vào giỏ
-                        </button>
-                        <button
-                           onClick={() => navigate(`/classes/${product?._id}`)}
-                          className="rounded-2xl border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
-                        >
-                          Xem
+                          <ShoppingBag size={14} />
+                          Đăng nhập để thêm
                         </button>
                       </div>
                     </div>
@@ -129,68 +261,17 @@ function Classess() {
                 ))}
               </>
             ) : (
-              <div className="col-span-full flex justify-center  items-center min-h-[60vh]">
-                <p className="text-xl font-semibold">Không tìm thấy sản phẩm</p>
+              <div className="col-span-full flex justify-center items-center min-h-[40vh] border border-dashed border-slate-200 bg-white rounded-sm">
+                <p className="text-sm font-light text-slate-400">
+                  Không tìm thấy sản phẩm phù hợp.
+                </p>
               </div>
-            )
-          ) : result?.length > 0 ? (
-            <>
-              {result?.map((product) => (
-                <div
-                  key={product.id}
-                  className="flex h-full flex-col overflow-hidden rounded-[24px] border border-gray-100 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(20,184,166,0.16)]"
-                >
-                  <div
-                    className="relative cursor-pointer overflow-hidden"
-                  onClick={() => navigate(`/classes/${product?._id}`)}
-                  >
-                    <img
-                      src={`http://localhost:3001/uploads/${product?.image}`}
-                      alt={product.name || "class"}
-                      className="h-40 w-full object-cover transition duration-500 hover:scale-105"
-                    />
-                    <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-teal-700 shadow-sm">
-                      ${product.price}
-                    </div>
-                    <div className="absolute bottom-3 left-3 rounded-full bg-teal-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                      New
-                    </div>
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-5">
-                    <h2 className="text-xl font-bold text-gray-800">
-                      {product.name}
-                    </h2>
-
-                    <p className="mt-2 h-16 overflow-hidden text-sm leading-6 text-gray-500">
-                      {product.description}
-                    </p>
-
-                    <div className="mt-4">
-                      <button
-                        onClick={() => navigate("/login")}
-                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-2.5 font-semibold text-white transition hover:opacity-90"
-                      >
-                        <ShoppingBag size={16} />
-                        Đăng nhập để thêm
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          ) : (
-            <div className="col-span-full flex justify-center  items-center min-h-[60vh]">
-              <p className="text-xl font-semibold">Không tìm thấy sản phẩm</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
 export default Classess;
-// useNavigate dùng để chuyẻn sang url khác
-
-// useNavigate và useParam thường đi chung với nhau

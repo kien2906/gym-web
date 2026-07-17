@@ -1,16 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import loginApi from "../services/apiLogin";
 import { baseApi } from "../services/baseApi";
 
 const initialState = {
-  user: null,
-  token: null,
-  isLogin: false,
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  token: localStorage.getItem("token") || null,
+  isLogin: !!localStorage.getItem("token"),
   loading: false,
   error: null,
   message: null,
- 
 };
 
 export const loginUser = createAsyncThunk("auth/login", async (form) => {
@@ -26,7 +24,6 @@ const auth = createSlice({
       state.user = null;
       state.token = null;
       state.isLogin = false;
-  
     },
   },
   // extraReducers: (builder) => {

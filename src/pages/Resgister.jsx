@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Register from "../services/apiRegister";
+
 import InputCommon from "../components/InputCommon";
+import { usePostRegisterMutation } from "../feature/registerApi";
 function Resgister() {
   const [form, setForm] = useState({
     fullName: "",
@@ -9,10 +10,12 @@ function Resgister() {
     phone: "",
     gender: "",
     password: "",
+    confirmPassword: "",
   });
+  const [registerUser, { error, isLoading, data }] = usePostRegisterMutation();
   const navigate = useNavigate();
 
-  const [error, setError] = useState({
+  const [errors, setError] = useState({
     fullName: "",
     email: "",
     gender: "",
@@ -55,29 +58,21 @@ function Resgister() {
       newError.confirmPassword = "Incorrect password confirmation";
     }
 
+    setError(newError);
+
     if (Object.keys(newError).length > 0) {
       return;
     }
+
+    const { confirmPassword, ...userData } = form;
     try {
-      const res = await Register({
-        fullName: form.fullName,
-        email: form.email,
-        password: form.password,
-        phone: form.phone,
-        gender: form.gender,
-      });
-      console.log(res.data);
-// localStorage.setItem("token", res?.token);
-// localStorage.setItem("user", JSON.stringify(res?.user));
-      if (res.success) {
-        navigate("/login");
-      } else {
-        setError(res.data.message);
-      }
+      const res = await registerUser(userData).unwrap();
+      console.log(res.message);
+      navigate("/login")
+      // localStorage.setItem("token", res?.token);
+      //  localStorage.setItem("user", JSON.stringify(res?.user));
     } catch (error) {
-      console.log(error.res?.status);
-      console.log(error.res?.data);
-      console.log(error.message);
+      console.log(error?.data?.message);
     }
   };
 
@@ -110,7 +105,7 @@ function Resgister() {
             />
 
             <span className="text-red-500 text-sm page">
-              {error && error.name}
+              {errors && errors.fullName}
             </span>
 
             <InputCommon
@@ -124,19 +119,24 @@ function Resgister() {
                   "rounded-md p-4 outline-none border border-slate-200",
               }}
             />
-            <span className="text-red-500 text-sm">{error && error.email}</span>
+            <span className="text-red-500 text-sm">
+              {errors && errors.email}
+            </span>
 
             <InputCommon
               props={{
                 type: "text",
                 placeholder: "Phone",
-                name: form.phone,
+                name: "phone",
+                value: form.phone,
                 handChange: handChange,
                 classname:
                   "rounded-md p-4 outline-none border border-slate-200",
               }}
             />
-            <span className="text-red-500 text-sm">{error && error.phone}</span>
+            <span className="text-red-500 text-sm">
+              {errors && errors.phone}
+            </span>
 
             <select
               name="gender"
@@ -154,7 +154,7 @@ function Resgister() {
               <option value="other">Other</option>
             </select>
             <span className="text-red-500 text-sm">
-              {error && error.gender}
+              {errors && errors.gender}
             </span>
 
             <div className="relative">
@@ -170,7 +170,7 @@ function Resgister() {
                 }}
               />
               <span className="text-red-500 text-sm">
-                {error && error.password}
+                {errors && errors.password}
               </span>
               <button
                 type="button"
@@ -183,6 +183,8 @@ function Resgister() {
                 props={{
                   placeholder: "Confirm Password",
                   handChange: handChange,
+                  name: "confirmPassword",
+                  value: form.confirmPassword,
                   classname:
                     "rounded-md p-4 outline-none border border-slate-200 w-full",
                 }}
@@ -195,9 +197,16 @@ function Resgister() {
             </div>
 
             <span className="text-red-500 text-sm">
-              {error && error.confirmPassword}
+              {errors && errors.confirmPassword}
             </span>
 
+            <span className="text-red-500 text-sm">
+              {error && error?.data?.message}
+            </span>
+
+            <span className="text-green-300-500 text-sm font-bold">
+              {data && data?.message}
+            </span>
             <button className="bg-teal-400 hover:bg-teal-600 text-white py-3 rounded-md font-bold transition cursor-pointer">
               Create Account
             </button>
