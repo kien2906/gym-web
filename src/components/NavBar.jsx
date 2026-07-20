@@ -8,10 +8,10 @@ import { useGetCartQuery } from "../feature/cartSlice";
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
-const user = JSON.parse(localStorage.getItem("user") || "null");
-  const cart = useSelector((state) => state.cart.cartItem);
- const {data} = useGetCartQuery()
- const cartItemCount = data?.cart.items.length
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  console.log(user?.avatar);
+  const { data } = useGetCartQuery();
+  const cartItemCount = data?.cart.items.length;
 
   // Prowess Lift
   return (
@@ -72,7 +72,7 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
                 Trainers
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="/testimonials"
                 className={
@@ -83,7 +83,7 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
               >
                 Testimonials
               </Link>
-            </li>
+            </li> */}
 
             <li>
               <Link
@@ -98,8 +98,8 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
               </Link>
             </li>
 
-            {token && user?.role ==="user"  ? (
-                 <li>
+            {token && user?.role === "user" ? (
+              <li>
                 <Link
                   to="/Cart"
                   className={
@@ -118,13 +118,10 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
                 </Link>
               </li>
             ) : (
-                ""
+              ""
             )}
-    
 
-            <li>
-              <Search />
-            </li>
+        
 
             <button onClick={handClick}>{darkMode ? <Moon /> : <Sun />}</button>
 
@@ -143,15 +140,21 @@ const user = JSON.parse(localStorage.getItem("user") || "null");
                       <FaUserCircle
                         className={`text-3xl text-gray-600 cursor-pointertransition   ${location.pathname === "/profile" ? "text-teal-500 " : "hover:text-teal-400"} `}
                       />
+
+                      <img src="" alt="" />
                     </div>
                   </li>
                 </Link>
               ) : (
                 <Link to="/profile">
                   <li>
-                    <div className="flex items-center gap-3 ">
-                      <FaUserCircle
-                        className={`text-3xl text-gray-600 cursor-pointertransition   ${location.pathname === "/profile" ? "text-teal-500 " : "hover:text-teal-400"} `}
+                    <div
+                      className={`w-12 h-12 rounded-full overflow-hidden flex items-center justify-center ${location.pathname === "/profile" ? " bg-teal-500  " : "hover:bg-teal-400 w-12 h-12 bg-gray-400"} `}
+                    >
+                      <img
+                        src={`http://localhost:3001/uploads/${user?.avatar}`}
+                        alt=""
+                        className="w-10 h-10 rounded-full object-cover bg-gray-300"
                       />
                     </div>
                   </li>

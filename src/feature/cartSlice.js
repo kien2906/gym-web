@@ -73,15 +73,35 @@ const addtoCartApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-        invalidatesTags: ["Cart"],
+      invalidatesTags: ["Cart"],
     }),
     getCart: builder.query({
       query: () => "/cart",
-      providesTags: ["Cart"],
+      providesTags: ["Cart","Payment"],
+    }),
+    deleteCart: builder.mutation({
+      query: (id) => ({
+        url: `/cart/${id}`,
+        method: "DELETE",
+      }),
+
+      invalidatesTags: ["Cart"],
+    }),
+    clearCart: builder.mutation({
+      query: () => ({
+        url: "/cart/clear",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Cart"],
     }),
   }),
 });
 
-export const { useAddCartsMutation, useGetCartQuery } = addtoCartApi;
+export const {
+  useAddCartsMutation,
+  useGetCartQuery,
+  useDeleteCartMutation,
+  useClearCartMutation,
+} = addtoCartApi;
 
 export default cartSlice.reducer;
