@@ -1,17 +1,25 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Minus, Plus, ShoppingBag, Sparkles, Trash2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, ShoppingBag, Sparkles } from "lucide-react";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
-import { useGetCartQuery } from "../feature/cartSlice";
+import {
+  useClearCartMutation,
+  useDeleteCartMutation,
+  useGetCartQuery,
+} from "../feature/cartSlice";
+import { i } from "framer-motion/client";
+import { useCreatePaymentMutation } from "../feature/paymentApi";
 
 const Cart = () => {
- 
   const [open, setOpen] = useState(null);
   const [deleteId, setIdDelete] = useState(null);
-  // const cart = useSelector((state) => state.cart.cartItem);
-  const {data} = useGetCartQuery()
-  const listCart=data?.cart?.items;
-   console.log(data?.cart?.items)
+ const nav = useNavigate()
+  const { data } = useGetCartQuery();
+  const [deleteCart] = useDeleteCartMutation();
+  const [clearCart] = useClearCartMutation();
+  const [createPayment] = useCreatePaymentMutation();
+  const listCart = data?.cart?.items;
+  console.log(listCart);
 
   const handOpen = (id) => {
     setIdDelete(id);
@@ -22,21 +30,53 @@ const Cart = () => {
     setOpen(false);
   };
 
-
-
   const getImageSrc = (image) => {
     if (!image) return null;
     if (image.startsWith("/") || image.startsWith("http")) return image;
     return `/images/${image.split("/").pop()}`;
   };
 
-  // const totalPrice = cart.reduce((sum, item) => {
-  //   return sum + (item.price * item.quantity || 0);
-  // }, 0);
- 
+  const totalPrice = listCart?.reduce((sum, item) => {
+    return sum + (item?.class.price || 0);
+  }, 0);
+
+  const counts = listCart?.filter((item) => item.class).length || 0;
+  console.log(counts);
+  console.log(totalPrice);
   // const shipping = totalPrice > 0 && totalPrice < 200 ? 15 : 0;
-  // const discount = totalPrice >= 200 ? 20 : 0;
-  // const finalTotal = Math.max(0, totalPrice + shipping - discount);
+  const caclulateDiscount = () => {
+    let giamgia = 0;
+    if (counts >= 3) {
+      giamgia = 15;
+    }
+    if (counts === 5) {
+      giamgia = 35;
+    }
+
+    return giamgia;
+  };
+  const discount = caclulateDiscount();
+  const finalTotal = totalPrice - (totalPrice * caclulateDiscount()) / 100;
+  console.log(finalTotal);
+
+  const handlePayment = async () => {
+    try {
+
+      const res = await createPayment({
+        totalPrice: finalTotal,
+      }).unwrap();
+
+      console.log(res);
+     
+      if(res.success){
+        nav("/payment")
+      }
+
+  
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!data?.cart?.items.length) {
     return (
@@ -69,7 +109,9 @@ const Cart = () => {
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-teal-500">
               Your cart
             </p>
-            <h1 className="text-3xl font-bold text-gray-800">Giỏ hàng của bạn</h1>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Giỏ hàng của bạn
+            </h1>
             <p className="mt-1 text-gray-500">
               Kiểm tra các khoá học bạn đã chọn và tiến hành thanh toán.
             </p>
@@ -100,8 +142,8 @@ const Cart = () => {
                 </div>
               </div>
               <button
-          
                 className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-500 transition hover:bg-red-50 cursor-pointer"
+                onClick={() => clearCart()}
               >
                 Xoá tất cả
               </button>
@@ -115,7 +157,7 @@ const Cart = () => {
                 >
                   {item?.class?.image ? (
                     <img
-                    src={`http://localhost:3001/uploads/${item.class.image}`}
+                      src={`http://localhost:3001/uploads/${item.class.image}`}
                       alt={item?.class.name}
                       className="h-24 w-full rounded-2xl object-cover sm:h-28 sm:w-28"
                     />
@@ -132,42 +174,25 @@ const Cart = () => {
                           {item?.class?.name}
                         </h3>
                         <p className="mt-1 text-sm text-gray-500">
-                         {item.class.description}
+                          {item.class.description}
                         </p>
                       </div>
-                    
                     </div>
 
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex items-center overflow-hidden rounded-full border border-gray-200">
-                        <button
-                       
-                          className={`flex h-10 w-10 items-center justify-center text-lg transition ${
-                            item.quantity === 0
-                              ? "cursor-not-allowed bg-gray-100 text-gray-300"
-                              : "bg-white text-gray-700 hover:bg-gray-50"
-                          }`}
-                          disabled={item.quantity === 0}
-                        >
-                          <Minus size={16} />
-                        </button>
-                        <span className="min-w-12 px-3 text-center text-sm font-semibold text-gray-700">
-                          {item.quantity}
-                        </span>
-                        <button
-                     
-                          className="flex h-10 w-10 items-center justify-center bg-teal-500 text-lg text-white transition hover:bg-teal-600"
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
-
-                      <div className="text-right">
+                    <div className="mt-4 flex items-center justify-between">
+                      <div>
                         <p className="text-sm text-gray-500">Đơn giá</p>
-                        <p className="text-lg font-bold text-teal-600">
-                        {(item.class.price * item.quantity).toLocaleString("vi-VN")} VND
+                        <p className="text-xl font-bold text-teal-600">
+                          {item.class.price.toLocaleString("vi-VN")} VND
                         </p>
                       </div>
+
+                      <button
+                        className="rounded-lg bg-white px-4 py-2 text-sm font-mediumtransitio text-red-500 border-red-200 border text-sm font-semibold hover:bg-red-50 cursor-pointer"
+                        onClick={() => deleteCart(item.class._id)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -177,9 +202,6 @@ const Cart = () => {
 
           <aside className="h-fit rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-teal-600">
-                <Sparkles size={18} />
-              </div>
               <h2 className="text-lg font-semibold text-gray-800">
                 Tóm tắt đơn hàng
               </h2>
@@ -188,15 +210,12 @@ const Cart = () => {
             <div className="mt-5 space-y-3 text-sm text-gray-600">
               <div className="flex items-center justify-between">
                 <span>Tạm tính</span>
-                <span>$</span>
+                <span>{totalPrice.toLocaleString("vi-VN")} VND</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span>Phí vận chuyển</span>
-                <span></span>
-              </div>
+
               <div className="flex items-center justify-between">
                 <span>Giảm giá</span>
-                <span></span>
+                <span>{discount}%</span>
               </div>
             </div>
 
@@ -204,23 +223,25 @@ const Cart = () => {
 
             <div className="flex items-center justify-between text-lg font-semibold text-gray-800">
               <span>Tổng tiền</span>
-              <span className="text-teal-600">$</span>
+              <span className="text-teal-600">
+                {finalTotal.toLocaleString("vi-VN")}VND
+              </span>
             </div>
 
-            <button className="mt-6 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-3 font-semibold text-white shadow-md transition hover:opacity-90">
+            <button className="mt-6 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-3 font-semibold text-white shadow-md transition hover:opacity-90"
+            onClick={handlePayment}
+            >
               Thanh toán ngay
             </button>
 
             <div className="mt-4 rounded-2xl bg-teal-50 p-3 text-sm text-teal-700">
-              Miễn phí vận chuyển cho đơn hàng trên $200.
+              Đã được áp dụng giảm giá {discount}%
             </div>
           </aside>
         </div>
       </div>
 
-      {open && (
-        <ConfirmDeleteModal onCancel={handClose}  />
-      )}
+      {open && <ConfirmDeleteModal onCancel={handClose} />}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import Breadcrumb from "../components/Breadcrumb";
 function Concact() {
   return (
     <div className="">
-      <Breadcrumb name="Contact"/>
+      <Breadcrumb name="Contact" />
       <Concact2 />
     </div>
   );
@@ -19,9 +19,6 @@ const Concact2 = () => {
   });
 
   const [error, setError] = useState({});
-
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +41,6 @@ const Concact2 = () => {
     setError(errornew);
     if (Object.keys(errornew).length > 0) return;
 
-
     try {
       const response = await fetch("http://localhost:4000/messages", {
         method: "POST",
@@ -57,13 +53,10 @@ const Concact2 = () => {
       if (!response.ok) {
         throw new Error("Could not send message");
       }
-
     } catch (e) {
       console.log(e);
- 
-  }}
-
-
+    }
+  };
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -94,7 +87,9 @@ const Concact2 = () => {
                 className="text-start border-2 w-full p-5 focus:border-teal-400  focus:outline-none rounded-md"
               />
               {error.name && (
-                <span className="mt-2 text-emerald-300 error block">{error.name}</span>
+                <span className="mt-2 text-emerald-300 error block">
+                  {error.name}
+                </span>
               )}
             </div>
             <div className="flex flex-col w-full">
@@ -107,7 +102,9 @@ const Concact2 = () => {
                 className="text-start border-2 w-full p-5 rounded-md  focus:border-teal-400  focus:outline-none "
               />
               {error.email && (
-                <span className="mt-2 text-emerald-300 error block">{error.email}</span>
+                <span className="mt-2 text-emerald-300 error block">
+                  {error.email}
+                </span>
               )}
             </div>
           </div>
@@ -121,7 +118,9 @@ const Concact2 = () => {
             className="p-5 border-2 rounded-md  focus:border-teal-400  focus:outline-none"
           />
           {error.subject && (
-            <span className="mt-2 text-emerald-300 error block">{error.subject}</span>
+            <span className="mt-2 text-emerald-300 error block">
+              {error.subject}
+            </span>
           )}
           <textarea
             placeholder="Message"
@@ -132,26 +131,23 @@ const Concact2 = () => {
             className="p-5 w-full border-2 rounded-md  focus:border-teal-400  focus:outline-none"
           />
           {error.message && (
-            <span className="mt-2 text-emerald-300 error block">{error.message}</span>
+            <span className="mt-2 text-emerald-300 error block">
+              {error.message}
+            </span>
           )}
           <div className="text-end">
             {" "}
             <button
               type="submit"
-            
               className="p-5 bg-teal-400 rounded-md mb-3 hover:bg-teal-700 cursor-pointer font-bold text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
-            Send
+              Send
             </button>
           </div>
         </form>
-        
       </div>
-       
     </>
   );
+};
 
-}
-      
-  
 export default Concact;

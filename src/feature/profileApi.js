@@ -7,9 +7,14 @@ export const profile = baseApi.injectEndpoints({
         url: "/users/profile",
         method: "PATCH",
         body: data,
-        })
+        }),
+        invalidatesTags :["Profile"]
     }),
+    getProfile : builer.query({
+      query : (id) => `/users/profile/${id}`,
+      providesTags: ["Profile"]
+    })
   }),
 });
 
-export const { useUpdateProfileMutation } = profile;
+export const { useUpdateProfileMutation ,useGetProfileQuery } = profile;

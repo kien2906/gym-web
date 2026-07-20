@@ -18,6 +18,7 @@ import Trainers from "../pages/Trainers";
 import Testimonials from "../pages/Testimonials";
 import TrainersDetail from "../pages/TrainersDetail";
 import Admin from "../pages/admin/Admin";
+import PaymentSuccess from "../pages/PaymentSuccess";
 
 function AppRoutes() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function AppRoutes() {
           <Route path="/trainers" element={<Trainers />} />
           <Route path="/trainers/:id" element={<TrainersDetail />} />
           <Route path="/testimonials" element={<Testimonials />} />
+           <Route path="/payment" element={<PaymentSuccess />} /> 
         </Routes>
       </main>
 

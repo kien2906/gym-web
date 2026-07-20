@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { logoutaccount } from "../feature/authSlice";
-import { useUpdateProfileMutation } from "../feature/profileApi";
+import {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "../feature/profileApi";
 import { FaCamera } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 function Profile() {
   const dispatch = useDispatch();
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [updateProfile, { error }] = useUpdateProfileMutation();
+  const { isLoading } = useGetProfileQuery(storedUser?.id);
+  console.log(storedUser);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [profile] = useState(storedUser);
+  const [profile, setProfile] = useState(storedUser);
+
   const nav = useNavigate();
 
   const handLogout = () => {
@@ -51,13 +57,14 @@ function Profile() {
         setIsSaving(true);
         const res = await updateProfile(formData).unwrap();
 
-        console.log(res);
+        console.log(res?.user);
+        setProfile(res.user);
         localStorage.setItem("user", JSON.stringify(res?.user));
         setForm({
-          fullName: res?.user?.fullName || "",
-          phone: res?.user?.phone || "",
-          gender: res?.user?.gender || "",
-          avatar: res?.user?.avatar || "",
+          fullName: res?.user?.fullName,
+          phone: res?.user?.phone,
+          gender: res?.user?.gender,
+          avatar: res?.user?.avatar,
         });
         setEdit(false);
       } catch (err) {
@@ -85,6 +92,13 @@ function Profile() {
       ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
       : "border-gray-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200"
   }`;
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-teal-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-gray-100 to-slate-200 px-4 py-8 sm:px-6 lg:px-8">
@@ -216,7 +230,7 @@ function Profile() {
               <>
                 <button
                   className="flex-1 rounded-xl bg-teal-500 py-2.5 font-medium text-white transition hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-teal-300"
-                  onClick={handleEditToggle}
+                  onClick={() => handleEditToggle()}
                   disabled={isSaving}
                 >
                   {isSaving ? "Saving..." : "Save changes"}

@@ -12,10 +12,15 @@ import {
 import { useDispatch } from "react-redux";
 import { addtoCart } from "../feature/cartSlice";
 import { useGetClassIdQuery } from "../feature/classApi";
+import { useGetReviewsQuery } from "../feature/review";
 
 function ClassesDetail() {
   const { id } = useParams();
   const { data, isLoading } = useGetClassIdQuery(id);
+  const { data: dataRview, isLoading: loadingReview } = useGetReviewsQuery(id);
+  console.log(dataRview?.reviews);
+
+  const reviewUser = dataRview?.reviews;
   const classItem = data?.data ?? data;
   const schedule = classItem?.schedule;
   const trainer = classItem?.trainer;
@@ -34,6 +39,15 @@ function ClassesDetail() {
       minute: "2-digit",
     });
   };
+  console.log(reviewUser);
+  const AvgRating =
+    reviewUser?.length > 0
+      ? reviewUser.reduce((sum, item) => {
+          return sum + item.rating;
+        }, 0) / reviewUser?.length
+      : 0;
+
+  console.log(AvgRating);
 
   const handleAddToCart = () => {
     dispatch(addtoCart(classItem));
@@ -92,7 +106,6 @@ function ClassesDetail() {
             </Link>
 
             {/* Badge */}
-         
 
             {/* Course Name */}
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
@@ -140,7 +153,6 @@ function ClassesDetail() {
                 Bạn sẽ đạt được gì sau khóa học?
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
                 {classItem?.benefits.map((benefit, idx) => (
                   <div key={idx} className="flex items-start">
                     <Check className="w-4 h-4 text-teal-600 mr-3 shrink-0 mt-1" />
@@ -328,8 +340,103 @@ function ClassesDetail() {
         </div>
 
         {/* 3. PHẦN DƯỚI: HỆ THỐNG FAQ THƯƠNG MẠI */}
+        {/* 3. PHẦN DƯỚI: HỆ THỐNG FAQ THƯƠNG MẠI */}
         <hr className="my-16 border-slate-200/60" />
-        <div></div>
+
+        {/* KHỐI ĐÁNH GIÁ & PHẢN HỒI TỪ HỌC VIÊN */}
+        <div className="space-y-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                Đánh giá từ học viên
+              </h2>
+              <p className="text-slate-500 text-sm mt-1">
+                Những phản hồi chân thực từ những bạn đã và đang trải nghiệm
+                khóa học này.
+              </p>
+            </div>
+
+            {/* Điểm trung bình tổng quan */}
+            <div className="flex items-center gap-4 bg-white border border-slate-200/60 p-4 rounded-sm shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.01)]">
+              <div className="text-center">
+                <div className="text-3xl font-extrabold text-slate-900 leading-tight">
+                  {AvgRating.toFixed(1)}
+                </div>
+                <div className="text-[11px] text-slate-400 font-medium uppercase mt-0.5">
+                  Trên 5 sao
+                </div>
+              </div>
+              <div className="h-8 w-[1px] bg-slate-200" />
+              <div>
+                <div className="flex text-amber-500 gap-0.5 mb-1">
+                  {"★".repeat(AvgRating)}
+                </div>
+                <p className="text-xs text-slate-500 font-light">
+                  {reviewUser?.length} đánh giá đã xác thực
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Thanh tiêu đề và nút Viết đánh giá */}
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 className="text-lg font-bold text-slate-800">
+              Đánh giá từ khách hàng
+            </h3>
+            <button
+              onClick={() => alert("Mở form đánh giá")} // Thay bằng logic mở modal của bạn
+              className="inline-flex items-center justify-center text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-sm transition-colors duration-150 shadow-sm"
+            >
+              Viết đánh giá
+            </button>
+          </div>
+          {/* Danh sách các review */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {reviewUser?.map((review, idx) => (
+              <div
+                key={idx}
+                className="bg-white border border-slate-200/60 p-6 rounded-sm space-y-4 shadow-[0_1px_2px_rgba(0,0,0,0.01)]"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={`http://localhost:3001/uploads/${review?.user.avatar}`}
+                      alt={review.name}
+                      className="w-10 h-10 rounded-full object-cover border border-slate-100"
+                    />
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-800 leading-snug">
+                        {review?.user.fullName}
+                      </h4>
+                      <p className="text-[11px] text-slate-400 font-light">
+                        {review.role}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-slate-400 font-light">
+                    {review.date}
+                  </span>
+                </div>
+
+                <div className="flex text-amber-500 text-xs gap-0.5">
+                  {"★".repeat(review.rating)}
+                  {"☆".repeat(5 - review.rating)}
+                </div>
+
+                <p className="text-slate-600 text-sm leading-relaxed font-light">
+                  {review.comment}
+                </p>
+              </div>
+            ))}
+          </div>
+          {reviewUser?.length > 2 && (
+            <div className="text-center pt-2">
+              <button className="inline-flex items-center justify-center text-xs font-semibold text-teal-700 hover:text-teal-800 bg-teal-50/50 hover:bg-teal-50 border border-teal-100/80 px-5 py-2.5 rounded-sm transition-colors duration-150">
+                Xem tất cả đánh giá
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
