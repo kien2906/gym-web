@@ -11,11 +11,6 @@ const initialState = {
   message: null,
 };
 
-export const loginUser = createAsyncThunk("auth/login", async (form) => {
-  const res = await loginApi(form);
-  return res;
-});
-
 const auth = createSlice({
   name: "auth",
   initialState,
@@ -24,6 +19,9 @@ const auth = createSlice({
       state.user = null;
       state.token = null;
       state.isLogin = false;
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
   },
   // extraReducers: (builder) => {

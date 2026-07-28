@@ -1,23 +1,19 @@
-import "./App.css";
-import store from "./app/store";
-import CartContext from "./context/CartContext";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import ThemeContext from "./context/ThemeContext";
-import AppRoutes from "./routes/AppRoutes";
-import { Provider } from "react-redux";
+import { AdminRoute } from "./routes/AppRoutesAdmin";
+import UserRouter from "./routes/AppRoutesUser";
+
+
 function App() {
+
   return (
-    <Provider store={store}>
-    <ThemeContext>
-      {" "}
-      <CartContext>
-        {" "}
-        
-          {" "}
-          <AppRoutes />
-     
-      </CartContext>
-    </ThemeContext>
-       </Provider>
+   
+      <Routes>
+        <Route path="/admin/*" element={<AdminRoute />} />
+        <Route path="/*" element={<UserRouter />} />
+      </Routes>
+ 
   );
 }
 

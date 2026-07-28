@@ -19,31 +19,27 @@ import Testimonials from "../pages/Testimonials";
 import TrainersDetail from "../pages/TrainersDetail";
 import Admin from "../pages/admin/Admin";
 import PaymentSuccess from "../pages/PaymentSuccess";
+import Transactions from "../pages/Traction";
+import ChangePassword from "../pages/ChangePassword";
 
-function AppRoutes() {
+function UserRouter() {
   const location = useLocation();
   const nav = useNavigate();
   const hideFooter =
     location.pathname === "/login" || location.pathname === "/register";
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
-  const role = user?.role === "admin";
   const isPageAdmin = location.pathname.startsWith("/admin");
   const { darkMode, handleDarkMode } = useContext(Theme);
   return (
     <>
-      {!role && !isPageAdmin && (
+      {!isPageAdmin && (
         <NavBar darkMode={darkMode} handClick={handleDarkMode} />
       )}
 
-      <main className={isPageAdmin ? "" : "mt-25"}>
+      <main className={"mt-25"}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              role === "admin" ? <Admin /> : <Home darkMode={darkMode} />
-            }
-          />
+          <Route path="/" element={<Home darkMode={darkMode} />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<Concact />} />
@@ -52,15 +48,16 @@ function AppRoutes() {
           <Route path="/Cart" element={<Cart />} />
           <Route path="/register" element={<Resgister />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={<Admin />}></Route>
           <Route path="/trainers" element={<Trainers />} />
           <Route path="/trainers/:id" element={<TrainersDetail />} />
+          <Route path="/transactions" element={<Transactions/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
           <Route path="/testimonials" element={<Testimonials />} />
-           <Route path="/payment" element={<PaymentSuccess />} /> 
+          <Route path="/payment" element={<PaymentSuccess />} />
         </Routes>
       </main>
 
-      {!hideFooter && !role && !isPageAdmin && (
+      {!hideFooter && !isPageAdmin && (
         <footer>
           <Footer darkMode={darkMode} />
         </footer>
@@ -69,6 +66,6 @@ function AppRoutes() {
   );
 }
 
-export default AppRoutes;
+export default UserRouter;
 
 ///cách cũ của react router
