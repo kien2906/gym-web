@@ -1,19 +1,33 @@
-import { Search, Moon, Sun } from "lucide-react";
+import { Search, Moon, Sun, LogOut, User, History } from "lucide-react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
 import { useGetCartQuery } from "../feature/cartSlice";
+import { useGetProfileQuery } from "../feature/profileApi";
+import { useEffect, useState } from "react";
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  console.log(user?.avatar);
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
+  const nav= useNavigate()
   const { data } = useGetCartQuery();
-  const cartItemCount = data?.cart.items.length;
+  const { data: profile } = useGetProfileQuery(user?.id);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const cartItemCount = data?.cart?.items?.length;
+  console.log(profile?.user?.avatar);
+  useEffect(() => {
+    console.log("Navbar profile:", profile);
+  }, [profile]);
   // Prowess Lift
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    nav("/login")
+  };
   return (
     <div>
       <div
@@ -98,7 +112,7 @@ const NavBar = ({ darkMode, handClick }) => {
               </Link>
             </li>
 
-            {token && user?.role === "user" ? (
+            {token && profile?.user?.role === "user" ? (
               <li>
                 <Link
                   to="/Cart"
@@ -121,44 +135,82 @@ const NavBar = ({ darkMode, handClick }) => {
               ""
             )}
 
-        
-
             <button onClick={handClick}>{darkMode ? <Moon /> : <Sun />}</button>
 
-            <li>
+            <li className="relative ">
               {!token ? (
                 <Link
                   to="/login"
-                  className={`text-gray-500 hover:text-teal-400 ${location.pathname === "/login" ? "text-teal-500" : "text-gray-500 hover:text-teal-500"}`}
+                  className={`hover:text-teal-400 ${
+                    location.pathname === "/login"
+                      ? "text-teal-500"
+                      : "text-gray-500"
+                  }`}
                 >
                   Login
                 </Link>
-              ) : user?.role === "admin" ? (
-                <Link to="/admin">
-                  <li>
-                    <div className="flex items-center gap-3 ">
-                      <FaUserCircle
-                        className={`text-3xl text-gray-600 cursor-pointertransition   ${location.pathname === "/profile" ? "text-teal-500 " : "hover:text-teal-400"} `}
-                      />
-
-                      <img src="" alt="" />
-                    </div>
-                  </li>
-                </Link>
               ) : (
-                <Link to="/profile">
-                  <li>
-                    <div
-                      className={`w-12 h-12 rounded-full overflow-hidden flex items-center justify-center ${location.pathname === "/profile" ? " bg-teal-500  " : "hover:bg-teal-400 w-12 h-12 bg-gray-400"} `}
-                    >
+                <>
+                  {/* 1. Nút Avatar (Bấm để bật/tắt menu) */}
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex items-center focus:outline-none"
+                  >
+                    <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-teal-400 hover:scale-105 transition duration-200">
                       <img
-                        src={`http://localhost:3001/uploads/${user?.avatar}`}
-                        alt=""
-                        className="w-10 h-10 rounded-full object-cover bg-gray-300"
+                        src={
+                          user?.avatar
+                            ? `http://localhost:3001/uploads/${user?.avatar}`
+                            : "https://via.placeholder.com/150"
+                        }
+                        alt="Avatar"
+                        className="w-full h-full object-cover"
                       />
                     </div>
-                  </li>
-                </Link>
+                  </button>
+
+            
+                  {isDropdownOpen && (
+                    <div
+                      className={`absolute mt-3 w-52 rounded-xl shadow-lg py-2 border z-50 ${
+                        darkMode
+                          ? "bg-black border-gray-800 text-white"
+                          : "bg-white border-gray-100 text-black"
+                      }`}
+                    >
+                      {/* Mục 1: Thông tin cá nhân */}
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-teal-500/10 hover:text-teal-400 transition"
+                      >
+                        <FaUserCircle className="text-lg" />
+                        Thông tin cá nhân
+                      </Link>
+
+                      {/* Mục 2: Lịch sử giao dịch */}
+                      <Link
+                        to="/transactions"
+                        onClick={() => setIsDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-teal-500/10 hover:text-teal-400 transition"
+                      >
+                        <History size={18} />
+                        Lịch sử giao dịch
+                      </Link>
+
+                      {/* Mục 3: Đăng xuất */}
+                      <div className="border-t border-gray-200 dark:border-gray-800 mt-1 pt-1">
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/10 transition text-left"
+                        >
+                          <LogOut size={18} />
+                          Đăng xuất
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </li>
           </ul>

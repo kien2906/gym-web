@@ -1,30 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { logoutaccount } from "../feature/authSlice";
 import {
   useGetProfileQuery,
   useUpdateProfileMutation,
 } from "../feature/profileApi";
-import { FaCamera } from "react-icons/fa";
+import { FaCamera, FaKey } from "react-icons/fa"; // Thêm icon chìa khóa
 import { useDispatch } from "react-redux";
+
 function Profile() {
   const dispatch = useDispatch();
+  const nav = useNavigate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
+
   const [updateProfile, { error }] = useUpdateProfileMutation();
-  const { isLoading } = useGetProfileQuery(storedUser?.id);
-  console.log(storedUser);
+  const { data: profileData, isLoading } = useGetProfileQuery(storedUser?.id);
+
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [profile, setProfile] = useState(storedUser);
-
-  const nav = useNavigate();
-
-  const handLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    dispatch(logoutaccount());
-    nav("/login");
-  };
 
   const [form, setForm] = useState({
     fullName: storedUser?.fullName || "",
@@ -33,19 +26,37 @@ function Profile() {
     avatar: storedUser?.avatar || "",
   });
 
+  // Đồng bộ form khi profileData tải xong từ API
+  useEffect(() => {
+    if (profileData?.user) {
+      setForm({
+        fullName: profileData.user.fullName || "",
+        phone: profileData.user.phone || "",
+        gender: profileData.user.gender || "",
+        avatar: profileData.user.avatar || "",
+      });
+    }
+  }, [profileData]);
+
+  const handLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    dispatch(logoutaccount());
+    nav("/login");
+  };
+
   const handChange = (e) => {
     const { name, value, files, type } = e.target;
-
     setForm({
       ...form,
       [name]: type === "file" ? files[0] : value,
     });
   };
+
   const handleEditToggle = async () => {
     if (edit) {
       try {
         const formData = new FormData();
-
         formData.append("fullName", form.fullName);
         formData.append("phone", form.phone);
         formData.append("gender", form.gender);
@@ -57,14 +68,12 @@ function Profile() {
         setIsSaving(true);
         const res = await updateProfile(formData).unwrap();
 
-        console.log(res?.user);
-        setProfile(res.user);
         localStorage.setItem("user", JSON.stringify(res?.user));
         setForm({
-          fullName: res?.user?.fullName,
-          phone: res?.user?.phone,
-          gender: res?.user?.gender,
-          avatar: res?.user?.avatar,
+          fullName: res?.user?.fullName || "",
+          phone: res?.user?.phone || "",
+          gender: res?.user?.gender || "",
+          avatar: res?.user?.avatar || "",
         });
         setEdit(false);
       } catch (err) {
@@ -78,11 +87,12 @@ function Profile() {
   };
 
   const handleCancel = () => {
+    const currentUser = JSON.parse(localStorage.getItem("user")) || storedUser;
     setForm({
-      fullName: profile?.fullName || "",
-      phone: profile?.phone || "",
-      gender: profile?.gender || "",
-      avatar: profile?.avatar || "",
+      fullName: currentUser?.fullName || "",
+      phone: currentUser?.phone || "",
+      gender: currentUser?.gender || "",
+      avatar: currentUser?.avatar || "",
     });
     setEdit(false);
   };
@@ -92,6 +102,7 @@ function Profile() {
       ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
       : "border-gray-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-200"
   }`;
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -106,13 +117,15 @@ function Profile() {
         <div className="h-32 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500" />
 
         <div className="px-6 pb-6 sm:px-8">
-          <div className="flex flex-col items-center -mt-16 ">
+          <div className="flex flex-col items-center -mt-16">
             <div className="relative">
               <img
                 src={
                   form.avatar instanceof File
                     ? URL.createObjectURL(form.avatar)
-                    : `http://127.0.0.1:3001/uploads/${storedUser?.avatar}`
+                    : form.avatar
+                    ? `http://127.0.0.1:3001/uploads/${form.avatar}`
+                    : "https://via.placeholder.com/150"
                 }
                 alt="avatar"
                 className="h-32 w-32 rounded-full object-cover border-4 border-white shadow-lg"
@@ -138,11 +151,6 @@ function Profile() {
                 </>
               )}
             </div>
-
-            <h2 className="mt-3 text-xl font-semibold text-gray-900">
-              {profile?.fullName || "Your Profile"}
-            </h2>
-            <p className="text-sm text-gray-500">{profile?.email}</p>
           </div>
 
           <div className="mt-6 space-y-3">
@@ -161,7 +169,7 @@ function Profile() {
                 />
               ) : (
                 <p className="text-sm font-medium text-gray-800">
-                  {profile?.fullName || "—"}
+                  {form?.fullName || "—"}
                 </p>
               )}
             </div>
@@ -171,7 +179,7 @@ function Profile() {
                 Email
               </label>
               <p className="text-sm font-medium text-gray-800">
-                {profile?.email || "—"}
+                {storedUser?.email || "—"}
               </p>
             </div>
 
@@ -186,13 +194,14 @@ function Profile() {
                   onChange={handChange}
                   className={inputClass}
                 >
+                  <option value="">Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
                 </select>
               ) : (
                 <p className="text-sm font-medium capitalize text-gray-800">
-                  {profile?.gender || "—"}
+                  {form?.gender || "—"}
                 </p>
               )}
             </div>
@@ -219,18 +228,19 @@ function Profile() {
                 </div>
               ) : (
                 <p className="text-sm font-medium text-gray-800">
-                  {profile?.phone || "—"}
+                  {form?.phone || "—"}
                 </p>
               )}
             </div>
           </div>
 
+          {/* NHÓM NÚT BẤM */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             {edit ? (
               <>
                 <button
                   className="flex-1 rounded-xl bg-teal-500 py-2.5 font-medium text-white transition hover:bg-teal-600 disabled:cursor-not-allowed disabled:bg-teal-300"
-                  onClick={() => handleEditToggle()}
+                  onClick={handleEditToggle}
                   disabled={isSaving}
                 >
                   {isSaving ? "Saving..." : "Save changes"}
@@ -250,6 +260,16 @@ function Profile() {
                 >
                   Edit profile
                 </button>
+
+                {/* Nút Change Password được thêm ở đây */}
+                <button
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white py-2.5 font-medium text-gray-700 transition hover:bg-gray-50"
+                  onClick={() => nav("/change-password")}
+                >
+                  <FaKey size={14} className="text-gray-500" />
+                  Change password
+                </button>
+
                 <button
                   className="flex-1 rounded-xl bg-red-500 py-2.5 font-medium text-white transition hover:bg-red-600"
                   onClick={handLogout}

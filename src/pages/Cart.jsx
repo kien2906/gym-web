@@ -63,6 +63,7 @@ const Cart = () => {
     try {
 
       const res = await createPayment({
+        paymentMethod: "cash",
         totalPrice: finalTotal,
       }).unwrap();
 

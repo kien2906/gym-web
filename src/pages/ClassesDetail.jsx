@@ -10,22 +10,28 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { addtoCart } from "../feature/cartSlice";
+import { addtoCart, useAddCartsMutation } from "../feature/cartSlice";
 import { useGetClassIdQuery } from "../feature/classApi";
-import { useGetReviewsQuery } from "../feature/review";
+import {
+  useCreateReviewsMutation,
+  useGetReviewsQuery,
+} from "../feature/review";
+import { useState } from "react";
+import ReviewModal from "./modelReview";
 
 function ClassesDetail() {
   const { id } = useParams();
   const { data, isLoading } = useGetClassIdQuery(id);
   const { data: dataRview, isLoading: loadingReview } = useGetReviewsQuery(id);
-  console.log(dataRview?.reviews);
-
+  const [addCart, { isLoading: isAddingCart }] = useAddCartsMutation();
+  const [modelReview, setModelReview] = useState(false);
+  const [createReview, { error }] = useCreateReviewsMutation();
   const reviewUser = dataRview?.reviews;
   const classItem = data?.data ?? data;
   const schedule = classItem?.schedule;
   const trainer = classItem?.trainer;
   const token = localStorage.getItem("token");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const nav = useNavigate();
 
   const formatTime = (value) => {
@@ -40,6 +46,7 @@ function ClassesDetail() {
     });
   };
   console.log(reviewUser);
+  console.log(dataRview?.reviews);
   const AvgRating =
     reviewUser?.length > 0
       ? reviewUser.reduce((sum, item) => {
@@ -47,10 +54,28 @@ function ClassesDetail() {
         }, 0) / reviewUser?.length
       : 0;
 
-  console.log(AvgRating);
+  // console.log(AvgRating);
 
-  const handleAddToCart = () => {
-    dispatch(addtoCart(classItem));
+  const handleAddToCart = async (id) => {
+    try {
+      const res = await addCart({
+        classId: id,
+        quantity: 1,
+      }).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handReview = async ({ rating, comment }) => {
+    const res = await createReview({
+      classId: id,
+      rating,
+      comment,
+    }).unwrap();
+
+    return res;
   };
 
   // SKELETON LOADING CAO CẤP TƯƠNG THÍCH VỚI LAYOUT MỚI
@@ -274,7 +299,7 @@ function ClassesDetail() {
                   {token ? (
                     <div className="flex flex-col gap-2.5">
                       <button
-                        onClick={handleAddToCart}
+                        onClick={() => handleAddToCart(id)}
                         className="w-full bg-teal-700 hover:bg-teal-800 active:bg-teal-900 text-white text-sm font-medium py-3 px-4 rounded-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 group"
                       >
                         <ShoppingBag
@@ -384,7 +409,7 @@ function ClassesDetail() {
               Đánh giá từ khách hàng
             </h3>
             <button
-              onClick={() => alert("Mở form đánh giá")} // Thay bằng logic mở modal của bạn
+              onClick={() => setModelReview(true)} // Thay bằng logic mở modal của bạn
               className="inline-flex items-center justify-center text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-sm transition-colors duration-150 shadow-sm"
             >
               Viết đánh giá
@@ -437,6 +462,13 @@ function ClassesDetail() {
             </div>
           )}
         </div>
+
+        <ReviewModal
+          isOpen={modelReview}
+          onClose={() => setModelReview(false)}
+          classNameName={classItem?.name}
+          onSubmit={handReview}
+        />
       </div>
     </div>
   );

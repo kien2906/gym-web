@@ -12,25 +12,29 @@ function Classess() {
   const [search, setSearch] = useState("");
   const token = localStorage.getItem("token");
   const { data, isLoading: isClassLoading, error } = useGetClassQuery();
-
+  const [sort, setSort] = useState("");
   const [addCart, { isLoading: isAddingCart }] = useAddCartsMutation();
   const [result, setResult] = useState([]);
-  const dispatch = useDispatch();
-  // console.log(data);
+  // const dispatch = useDispatch();
+  console.log(data?.classes);
 
+  //result = [] va searchResult va data = undefined = > render lan dau
+  // api dc goi
   useEffect(() => {
-    if (data?.classes) {
-      setResult(data.classes);
-    }
-  }, [data]);
-
-  const handSearch = () => {
-    const searchClasses = data?.classes?.filter((p) =>
+    let searchResult = data?.classes?.filter((p) =>
       p.name.toLowerCase().includes(search.toLowerCase()),
     );
-    setResult(searchClasses);
-  };
 
+    if (sort === "tangdan") {
+      searchResult.sort((a, b) => a.price - b.price);
+    } else if (sort === "giamdan") {
+      searchResult.sort((a, b) => b.price - a.price);
+    }
+
+    setResult(searchResult);
+  }, [sort, search, data?.classes]);
+
+  // setResult(sorttangdan)
   const handAddCart = async (classId) => {
     try {
       const res = await addCart({
@@ -43,8 +47,6 @@ function Classess() {
       console.log(error);
     }
   };
-
-  console.log(data?.classes.trainer);
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-slate-800 font-sans antialiased pb-20 mt-16 md:mt-20">
@@ -75,19 +77,24 @@ function Classess() {
                 className="w-full px-4 py-2.5 text-sm text-slate-800 bg-transparent focus:outline-none placeholder:text-slate-400 font-light"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handSearch();
-                  }
-                }}
               />
               <button
-                onClick={handSearch}
+                onClick={(e) => setSearch(e.target.value)}
                 className="px-4 py-2.5 text-slate-400 hover:text-teal-700 active:text-teal-800 transition-colors border-l border-slate-100"
                 aria-label="Search button"
+              ></button>
+
+              <select
+                name="sortPrice"
+                id="sortPrice"
+                onChange={(e) => setSort(e.target.value)}
+                className="rounded-xl border px-3 py-1.5 text-sm"
               >
-                <Search size={16} />
-              </button>
+                <option value="">Sắp xếp theo giá</option>{" "}
+                {/* Thêm dòng này để làm mặc định */}
+                <option value="tangdan">Giá: Thấp đến Cao ↑</option>
+                <option value="giamdan">Giá: Cao đến Thấp ↓</option>
+              </select>
             </div>
           </div>
         </div>
