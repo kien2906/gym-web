@@ -42,7 +42,7 @@ const ReviewModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Lớp nền mờ phía sau */}
       <div
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-slate-200/40 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
@@ -93,8 +93,8 @@ const ReviewModal = ({
                       size={32} // Kích thước ngôi sao
                       className={`transition-colors duration-150 ${
                         isFilled
-                          ? "fill-amber-400 text-amber-400 drop-shadow-sm" // Màu vàng khi được chọn
-                          : "text-gray-300" // Màu xám khi chưa chọn
+                          ? "fill-amber-400 text-amber-400 drop-shadow-sm" 
+                          : "text-gray-300" 
                       }`}
                     />
                   </button>
@@ -104,7 +104,7 @@ const ReviewModal = ({
 
             {/* Hiển thị text trạng thái sao dựa trên lựa chọn */}
             <p className="mt-2 text-xs font-semibold text-teal-600 min-h-[16px]">
-              {rating === 5 && "Cực kỳ hài lòng! ⭐⭐⭐⭐⭐"}
+              {rating === 5 && "Cực kỳ hài lòng!"} <Star></Star>
               {rating === 4 && "Rất tốt! ⭐⭐⭐ Rely"}
               {rating === 3 && "Bình thường ⭐⭐⭐"}
               {rating === 2 && "Tạm ổn ⭐⭐"}

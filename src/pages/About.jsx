@@ -14,7 +14,6 @@ import team3 from "../assets/team3.jpg";
 import { Home7 } from "./Home";
 import about1 from "../assets/about1.jpg";
 import about2 from "../assets/about2.jpg";
-import { useEffect, useState } from "react";
 import Breadcrumb from "../components/Breadcrumb";
 
 const About = () => {
@@ -33,31 +32,34 @@ const About = () => {
 
 const About2 = () => {
   return (
-    <div className="container mx-auto grid grid-cols-[35%_65%] py-10">
-      <div>
-        <p className="uppercase text-gray-400 font-bold">ABOUT US</p>
-        <h3 className="text-4xl font-bold max-w-[350px]">
-          Created to help you live a better, happier, healthier life.
-        </h3>
-      </div>
+    <div className="max-w-7xl w-full mx-auto py-5">
+      <div className="grid grid-cols-[35%_65%]">
+        <div>
+          <p className="uppercase text-gray-400 font-bold">ABOUT US</p>
+          <h3 className="text-4xl font-bold max-w-[350px]">
+            Created to help you live a better, happier, healthier life.
+          </h3>
+        </div>
 
-      <div className="flex flex-col gap-2">
-        <p className="uppercase text-gray-400 font-bold">Why choose us</p>
-        <h3 className="text-4xl font-bold  max-w-[500px]">
-          How to Keep Your Body Healthy in Over the festival
-        </h3>
-        <p className="text-[#696687] text-lg leading-7 my-5">
-          Lorem ipsum dolor sit amet,Ea consequuntur illum facere aperiam sequi
-          optio consectetur adipisicing.Nunc id ipsum fringilla, gravida felis
-          vitae. lacinia id, sunt in culpa quis lacinia. Lorem ipsum dolor, sit
-          amet init elit. Eos, debitis. Quas minima sunt natus tempore, maiores
-          aliquid modi felis vitae facere aperiam sequi optio lacinia id ipsum.
-        </p>
+        <div className="flex flex-col gap-2">
+          <p className="uppercase text-gray-400 font-bold">Why choose us</p>
+          <h3 className="text-4xl font-bold  max-w-[500px]">
+            How to Keep Your Body Healthy in Over the festival
+          </h3>
+          <p className="text-[#696687] text-lg leading-7 my-5 text-pretty">
+            Lorem ipsum dolor sit amet,Ea consequuntur illum facere aperiam
+            sequi optio consectetur adipisicing.Nunc id ipsum fringilla, gravida
+            felis vitae. lacinia id, sunt in culpa quis lacinia. Lorem ipsum
+            dolor, sit amet init elit. Eos, debitis. Quas minima sunt natus
+            tempore, maiores aliquid modi felis vitae facere aperiam sequi optio
+            lacinia id ipsum.
+          </p>
 
-        <div className="flex justify-self-start">
-          <button className="mt-5 bg-teal-400 px-8 py-4 rounded-md text-white hover:bg-teal-600 hover:-translate-y-2.5 duration-300 ">
-            Read More
-          </button>
+          <div className="flex justify-self-start">
+            <button className="mt-5 bg-teal-400 px-8 py-4 rounded-md text-white hover:bg-teal-600 hover:-translate-y-2.5 duration-300 ">
+              Read More
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -196,16 +198,6 @@ const About4 = () => {
 };
 
 const About5 = () => {
-  const [video, setvideo] = useState(null);
-  useEffect(() => {
-    const fetchVideo = async () => {
-      const data = await getVideos();
-      setvideo(data[0]);
-    };
-
-    fetchVideo();
-  }, []);
-
   return (
     <div>
       <div className="flex flex-col items-center justify-center bg-[#6c757d] p-30">
@@ -228,19 +220,6 @@ const About5 = () => {
             Get Start Now
           </button>
           <div className="flex justify-center items-center  gap-4 ">
-            {video && (
-              <button
-                className="bg-[#7e7d7d]/80 p-5 rounded-full cursor-pointer flex items-center justify-center cursor-pointer"
-                onClick={() =>
-                  window.open(
-                    `https://www.youtube.com/watch?v=${video.youtubeId}`,
-                    "_blank",
-                  )
-                }
-              >
-                <FaPlay className="text-white text-lg" />
-              </button>
-            )}
             <p className="text-white pe-2.5 font-medium">Watch Video</p>
           </div>
         </div>
@@ -252,7 +231,7 @@ const About5 = () => {
 const About6 = () => {
   return (
     <>
-      <div className="p-30">
+      <div className="max-w-6xl mx-auto py-10">
         <div className="text-center flex flex-col items-center mb-8 ">
           <h6>Meet OUR</h6>
           <h3 className="text-5xl font-bold ">Strongest Team</h3>

@@ -55,7 +55,14 @@ export const login = baseApi.injectEndpoints({
     login: builer.mutation({
       query: (data) => ({ url: "/users/login", method: "POST", body: data }),
     }),
+    logingoole: builer.mutation({
+      query: (data) => ({
+        url: "/users/login-google",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = login;
+export const { useLoginMutation , useLogingooleMutation} = login;
