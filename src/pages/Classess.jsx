@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useAddCartsMutation } from "../feature/cartSlice";
-
 import { Search, ShoppingBag } from "lucide-react";
 import { useGetClassQuery } from "../feature/classApi";
 import Breadcrumb from "../components/Breadcrumb";

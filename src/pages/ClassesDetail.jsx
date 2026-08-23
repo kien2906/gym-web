@@ -9,8 +9,7 @@ import {
   Check,
   HelpCircle,
 } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { addtoCart, useAddCartsMutation } from "../feature/cartSlice";
+
 import { useGetClassIdQuery } from "../feature/classApi";
 import {
   useCreateReviewsMutation,

@@ -4,11 +4,13 @@ export const Class = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getClass: builder.query({
       query: () => "/classes",
+      providesTags: ["Classes"]
     }),
 
     getClassId: builder.query({
       query: (id) => `/classes/${id}`,
     }),
+
   }),
 });
 

@@ -6,15 +6,24 @@ import home4 from "../assets/anhhome4.jpg";
 import home6_1 from "../assets/home6_1.jpg";
 import home6_2 from "../assets/home6_2.jpg";
 import home6_3 from "../assets/home6_3.jpg";
-import { useEffect, useState, useContext, useMemo } from "react";
+import { useEffect, useState, useContext } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-import reviews from "../data.js";
+// import reviews from "../data.js";
 import { Link } from "react-router-dom";
 import { Theme } from "../context/ThemeContext.jsx";
 import InputCommon from "../components/InputCommon.jsx";
-import { p } from "framer-motion/m";
+
 // const { darkMode, handleDarkMode } = useContext(Theme);
 const Home = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
+
   return (
     <>
       <div
@@ -96,54 +105,59 @@ const Home1 = () => {
   return (
     <>
       <div
-        className={`flex justify-center items-center py-20 gap-5  ${darkMode ? "bg-black text-white" : "bg-white"} fade-Up`}
+        className={`${darkMode ? "bg-black text-white" : "bg-white"}`}
       >
-        <div className="border px-8 py-5 flex flex-col items-start rounded-md hover:bg-[#011627] group">
-          <h2 className=" text-black font-bold text-xl py-2 group-hover:text-white">
-            Workout Videos
-          </h2>
-          <span className="rounded-full bg-teal-400 p-5 my-3">
-            {" "}
-            <FaVideo className="text-white text-2xl" />{" "}
-          </span>
-          <p className="py-2 group-hover:text-white   text-gray-500">
-            Access to hundreds of free <br /> workout videos.
-          </p>
-        </div>
-        <div className="border px-8 py-5 flex flex-col items-start rounded-md group hover:bg-[#011627]">
-          <h2 className="font-bold text-xl py-2  group-hover:text-white">
-            Workout Programs
-          </h2>
-          <span className="rounded-full bg-teal-400 p-5 my-3">
-            {" "}
-            <FaBars className="text-white text-2xl" />
-          </span>
-          <p className="py-2  text-gray-500  group-hover:text-white ">
-            Affordable and effective <br /> workout programs.
-          </p>
-        </div>
-        <div className="border px-8 py-5 flex flex-col items-start rounded-md hover:bg-[#011627] group">
-          <h2 className="font-bold text-xl py-2  group-hover:text-white">
-            Meal Plans
-          </h2>
-          <span className="rounded-full bg-teal-400 p-5 my-3  group-hover:text-white">
-            {" "}
-            <FaPen className="text-white text-2xl" />
-          </span>
-          <p className="py-2  text-gray-500  group-hover:text-white">
-            Plans built with registered <br /> nutritionists.
-          </p>
-        </div>
-        <div className="border px-8 py-5 flex flex-col items-start rounded-md  hover:bg-[#011627] group">
-          <h2 className="font-bold text-xl py-2  group-hover:text-white">
-            Free Membership
-          </h2>
-          <span className="rounded-full bg-teal-400 p-5 my-3">
-            <FaUsers className="text-white text-2xl" />
-          </span>
-          <p className="py-2  text-gray-500  group-hover:text-white">
-            Add powerful features to <br /> your membership.
-          </p>
+        <div
+          data-aos="fade-up"
+          className={`flex justify-center items-center py-20 gap-5 `}
+        >
+          <div className="border px-8 py-5 flex flex-col items-start rounded-md hover:bg-[#011627] group">
+            <h2 className=" text-black font-bold text-xl py-2 group-hover:text-white">
+              Workout Videos
+            </h2>
+            <span className="rounded-full bg-teal-400 p-5 my-3">
+              {" "}
+              <FaVideo className="text-white text-2xl" />{" "}
+            </span>
+            <p className="py-2 group-hover:text-white   text-gray-500">
+              Access to hundreds of free <br /> workout videos.
+            </p>
+          </div>
+          <div className="border px-8 py-5 flex flex-col items-start rounded-md group hover:bg-[#011627]">
+            <h2 className="font-bold text-xl py-2  group-hover:text-white">
+              Workout Programs
+            </h2>
+            <span className="rounded-full bg-teal-400 p-5 my-3">
+              {" "}
+              <FaBars className="text-white text-2xl" />
+            </span>
+            <p className="py-2  text-gray-500  group-hover:text-white ">
+              Affordable and effective <br /> workout programs.
+            </p>
+          </div>
+          <div className="border px-8 py-5 flex flex-col items-start rounded-md hover:bg-[#011627] group">
+            <h2 className="font-bold text-xl py-2  group-hover:text-white">
+              Meal Plans
+            </h2>
+            <span className="rounded-full bg-teal-400 p-5 my-3  group-hover:text-white">
+              {" "}
+              <FaPen className="text-white text-2xl" />
+            </span>
+            <p className="py-2  text-gray-500  group-hover:text-white">
+              Plans built with registered <br /> nutritionists.
+            </p>
+          </div>
+          <div className="border px-8 py-5 flex flex-col items-start rounded-md  hover:bg-[#011627] group">
+            <h2 className="font-bold text-xl py-2  group-hover:text-white">
+              Free Membership
+            </h2>
+            <span className="rounded-full bg-teal-400 p-5 my-3">
+              <FaUsers className="text-white text-2xl" />
+            </span>
+            <p className="py-2  text-gray-500  group-hover:text-white">
+              Add powerful features to <br /> your membership.
+            </p>
+          </div>
         </div>
       </div>
     </>
@@ -155,6 +169,7 @@ const Home2 = () => {
   return (
     <>
       <div
+        
         className={`w-full flex items-stretch gap-8 py-16 px-60
       ${darkMode ? "bg-black text-white shadow-[0_-15px_30px_rgba(255,255,255,0.1),0_15px_30px_rgba(255,255,255,0.1),0_0_50px_rgba(255,255,255,0.08)]" : "bg-white text-black"}`}
       >
@@ -249,9 +264,9 @@ const Home4 = () => {
   return (
     <>
       <div
-        className={`justify-center items-start gap-5 flex p-30 ${darkMode ? "bg-black text-white  shadow-[0_-15px_30px_rgba(255,255,255,0.1),0_15px_30px_rgba(255,255,255,0.1),0_0_50px_rgba(255,255,255,0.08)]" : "bg-white"}`}
+        className={`   justify-center items-start gap-5 flex p-30 ${darkMode ? "bg-black text-white  shadow-[0_-15px_30px_rgba(255,255,255,0.1),0_15px_30px_rgba(255,255,255,0.1),0_0_50px_rgba(255,255,255,0.08)]" : "bg-white"}`}
       >
-        <div className="flex flex-col justify-items-start items-start w-[550px]">
+        <div className="flex flex-col justify-items-start items-start data-aos=fade-right max-w-xl">
           <h2 className="font-bold text-4xl">
             Once you can control your mind, you can control your body.
           </h2>
@@ -261,7 +276,7 @@ const Home4 = () => {
             in ligula. Semper at tempufddfel. Lorem ipsum dolor sit amet elit.
           </p>
 
-          <div>
+          <div >
             <div className="w-[450px] py-3">
               <h2 className="font-bold text-md mb-3">Immune</h2>
 
@@ -296,7 +311,7 @@ const Home4 = () => {
           </div>
         </div>
 
-        <div>
+        <div data-aos="fade-left">
           <img
             src={home4}
             alt="logo"
@@ -313,6 +328,7 @@ const Home5 = () => {
   return (
     <>
       <div
+      
         className={`flex flex-col items-center gap-5 p-20 h-full  ${darkMode ? "bg-black text-white w-full" : "bg-[#6c757d] text-white"} `}
       >
         <h2 className=" text-4xl font-bold text-center w-[800px] text-[#eee]">
@@ -344,6 +360,7 @@ const Home6 = () => {
   return (
     <>
       <div
+   
         className={`flex flex-col items-center p-30 ${darkMode ? "bg-black text-white   shadow-[0_-15px_30px_rgba(255,255,255,0.1),0_15px_30px_rgba(255,255,255,0.1),0_0_50px_rgba(255,255,255,0.08)]" : "bg-white"}`}
       >
         <div className="flex flex-col items-center gap-2 mb-10">
@@ -422,13 +439,15 @@ const Home6 = () => {
 const Home7 = () => {
   return (
     <>
-      <div className="flex bg-teal-400 gap-5 justify-between items-center px-40 py-15 ">
-        <h2 className="text-4xl font-bold">
-          Ready to try a Prowess Lift workout?
-        </h2>
-        <button className="px-10 py-3 border rounded-md bg-white text-teal-400 font-bold  text-xl">
-          Get Started Today
-        </button>
+      <div>
+        <div className="xoay flex bg-teal-400 gap-5 justify-around items-center p-5">
+          <h2 className="text-4xl font-bold ">
+            Ready to try a Prowess Lift workout?
+          </h2>
+          <button className="px-10 py-3 border rounded-md bg-white text-teal-400 font-bold  text-xl">
+            Get Started Today
+          </button>
+        </div>
       </div>
     </>
   );
@@ -450,6 +469,7 @@ const Home8 = () => {
 
   const handChange = (e) => {
     const { name, value } = e.target;
+
     setBmi((pre) => ({
       ...pre,
       [name]: value,
@@ -457,11 +477,14 @@ const Home8 = () => {
   };
 
   const handleCalculate = () => {
-    const h = bmi.height;
-    const w = bmi.weight;
-
-    if (!h.length || !w.length) {
-      setError("Please enter your height and weight.");
+    const h = Number(bmi.height);
+    const w = Number(bmi.weight);
+    if (!h || !w) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    if (isNaN(Number(h)) || isNaN(Number(w))) {
+      setError("Height and weight must be numbers.");
       return;
     }
 
@@ -474,8 +497,8 @@ const Home8 = () => {
       setError("Weight must be between 10 kg and 500 kg.");
       return;
     }
-    const bmiValue = w / Math.pow(h, 2);
-
+    const heightInMeters = h / 100;
+    const bmiValue = w / Math.pow(heightInMeters, 2);
     let status;
 
     if (bmiValue < 18.5) {
@@ -490,13 +513,14 @@ const Home8 = () => {
     console.log(bmiValue);
     setError("");
     setResult({
-      bmi: bmiValue.toFixed(4),
+      bmi: bmiValue.toFixed(1),
       status,
     });
   };
 
   return (
     <div
+     
       className={`flex flex-col items-center justify-center py-10 w-full min-h-screen ${
         darkMode ? "bg-black text-white" : "bg-white text-gray-800"
       }`}
@@ -522,7 +546,8 @@ const Home8 = () => {
             name="height"
             value={bmi.height}
             onChange={handChange}
-            type="number"
+            type="text"
+            required
             placeholder="e.g. 170"
             className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-400 ${
               darkMode
@@ -539,7 +564,8 @@ const Home8 = () => {
             value={bmi.weight}
             name="weight"
             onChange={handChange}
-            type="number"
+            type="text"
+            required
             placeholder="e.g. 60"
             className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-400 ${
               darkMode

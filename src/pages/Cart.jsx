@@ -2,39 +2,18 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ShoppingBag, Sparkles } from "lucide-react";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
-import {
-  useClearCartMutation,
-  useDeleteCartMutation,
-  useGetCartQuery,
-} from "../feature/cartSlice";
-import { i } from "framer-motion/client";
 import { useCreatePaymentMutation } from "../feature/paymentApi";
 
 const Cart = () => {
   const [open, setOpen] = useState(null);
   const [deleteId, setIdDelete] = useState(null);
- const nav = useNavigate()
+  const nav = useNavigate();
   const { data } = useGetCartQuery();
   const [deleteCart] = useDeleteCartMutation();
   const [clearCart] = useClearCartMutation();
   const [createPayment] = useCreatePaymentMutation();
   const listCart = data?.cart?.items;
   console.log(listCart);
-
-  const handOpen = (id) => {
-    setIdDelete(id);
-    setOpen(true);
-  };
-
-  const handClose = () => {
-    setOpen(false);
-  };
-
-  const getImageSrc = (image) => {
-    if (!image) return null;
-    if (image.startsWith("/") || image.startsWith("http")) return image;
-    return `/images/${image.split("/").pop()}`;
-  };
 
   const totalPrice = listCart?.reduce((sum, item) => {
     return sum + (item?.class.price || 0);
@@ -61,19 +40,16 @@ const Cart = () => {
 
   const handlePayment = async () => {
     try {
-
       const res = await createPayment({
         paymentMethod: "cash",
         totalPrice: finalTotal,
       }).unwrap();
 
       console.log(res);
-     
-      if(res.success){
-        nav("/payment")
-      }
 
-  
+      if (res.success) {
+        nav("/payment");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -229,8 +205,9 @@ const Cart = () => {
               </span>
             </div>
 
-            <button className="mt-6 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-3 font-semibold text-white shadow-md transition hover:opacity-90"
-            onClick={handlePayment}
+            <button
+              className="mt-6 w-full rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-3 font-semibold text-white shadow-md transition hover:opacity-90"
+              onClick={handlePayment}
             >
               Thanh toán ngay
             </button>
@@ -242,7 +219,7 @@ const Cart = () => {
         </div>
       </div>
 
-      {open && <ConfirmDeleteModal onCancel={handClose} />}
+      {/* {open && <ConfirmDeleteModal onCancel={handClose} />} */}
     </div>
   );
 };

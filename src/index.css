@@ -1,55 +1,50 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap");
 @theme {
   --font-assistant: "Assistant", sans-serif;
   --primary-color: #2ec4b6;
 }
 
-
 body {
-  transition: background-color 300ms ease, color 300ms ease;
-  
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
 }
 
-.navbar h1{
-    font-size: 26px;
-    font-family: var(--font-assistant);
+.navbar h1 {
+  font-size: 26px;
+  font-family: var(--font-assistant);
 }
 
-.fade-up{
-   animation: fade-Up 1s ease-in forwards;
-
+.fade-up {
+  animation: fade-Up 1s ease-in forwards;
 }
 
-.error  {
-  animation: error 1s ease-in-out forwards ;
+.error {
+  animation: error 1s ease-in-out forwards;
 }
 
-@keyframes error{
-
-  from{
+@keyframes error {
+  from {
     opacity: 0;
     transform: translateX(20px);
-  }to{
+  }
+  to {
     opacity: 1;
     transform: translateY(0px);
-
   }
-
-
 }
 
 @keyframes fade-Up {
-  
-  from{
-    transform:  translateY(20px);
+  from {
+    transform: translateY(20px);
     opacity: 0;
-  }to{
-    opacity: 1;
-     transform:  translateY(0px);
   }
-
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
 .page {
@@ -64,5 +59,18 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+.xoay {
+  min-height: 100px;
+  animation: xoay 20s linear infinite;
+}
+
+@keyframes xoay {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100vw);
   }
 }

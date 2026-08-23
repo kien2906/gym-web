@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 import InputCommon from "../components/InputCommon";
-import { useLoginMutation } from "../feature/authSlice";
+import { useLogingooleMutation, useLoginMutation } from "../feature/authSlice";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 // import { useDispatch, useSelector } from "react-redux";
 
@@ -14,6 +15,7 @@ function Login() {
   });
 
   const [loginUser, { isLoading }] = useLoginMutation();
+  const [loginGoogle] = useLogingooleMutation();
   // const { loading, error, message } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState({});
@@ -53,9 +55,31 @@ function Login() {
       } else {
         navigate("/");
       }
-    } catch (err) {
-      setMess(err?.data?.message);
-      console.log("Login failed", err);
+    } catch (error) {
+      setMess(error?.data?.message);
+    }
+  };
+
+  const handScusses = async (res) => {
+    try {
+      const { credential } = res;
+      console.log(credential);
+      const data = await loginGoogle({
+        credential: credential,
+      }).unwrap();
+      console.log(data?.user?.role);
+       localStorage.setItem("token", data?.token);
+      localStorage.setItem("user", JSON.stringify(data?.user));
+
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      if (user?.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      setMess(error?.data?.message);
     }
   };
 
@@ -140,12 +164,18 @@ function Login() {
               </button>
             </form>
 
+            <GoogleLogin onSuccess={handScusses} />
+
             <p className="text-sm text-[#7e7d7d]">
               Don't have an account?{" "}
               <Link to="/register" className="text-teal-400 font-bold">
                 Create one
               </Link>
             </p>
+
+            <div>
+              <div className="flex justify-center"></div>
+            </div>
           </div>
 
           <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-[#011627] to-[#0b2a3a] p-8">

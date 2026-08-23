@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   History,
   ArrowUpRight,
@@ -10,16 +10,17 @@ import {
   XCircle,
 } from "lucide-react";
 import { useGetOrderQuery } from "../feature/TransactionsApi";
-import { tr } from "framer-motion/m";
 
 const Transactions = ({ darkMode }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [result, setResult] = useState([]);
   const [searchDate, setSearchDate] = useState("");
-  const { data } = useGetOrderQuery();
+  const { data, isLoading, isFetching } = useGetOrderQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const order = data?.result;
-  console.log(order);
-  
+  const lengthData = data?.result?.length;
+
   // Giả sử dữ liệu của bạn là mảng orders
   useEffect(() => {
     if (!order || !Array.isArray(order)) {
@@ -30,7 +31,7 @@ const Transactions = ({ darkMode }) => {
 
     const searchResult = order?.filter((item) => {
       const rawDate = item?.payment?.createdAt;
-      const code = item?.payment?.transactionCode.toLowerCase();
+      const code = item?.payment?.transactionCode.toLowerCase() || "";
 
       const matchSearch = keyword ? code.includes(keyword) : true;
       const matchDate = searchDate
@@ -41,9 +42,113 @@ const Transactions = ({ darkMode }) => {
     });
     setResult(searchResult);
   }, [order, searchTerm, searchDate]);
+
+  if (isLoading || isFetching) {
+    return (
+      <>
+        <div
+          className={`min-h-[80vh] pt-20 pb-12  transition-colors duration-200 max-w-6xl mx-auto `}
+        >
+          <div className="mb-8">
+            <h1 className="text-3xl font-extrabold flex items-center gap-3">
+              <History className="text-teal-400" size={32} />
+              Lịch sử giao dịch
+            </h1>
+            <p className="text-gray-400 text-sm mt-1">
+              Quản lý và xem lại toàn bộ hóa đơn thanh toán của bạn
+            </p>
+          </div>
+          <div
+            className={`p-4 rounded-2xl mb-6 border flex flex-col md:flex-row gap-4 justify-between items-center ${
+              darkMode
+                ? "bg-gray-900/60 border-gray-800"
+                : "bg-white border-gray-200 shadow-sm"
+            }`}
+          >
+            {/* Ô Nhập Tìm kiếm */}
+            <div className="relative w-full md:w-80">
+              <Search
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="Tìm theo mã ID, tên dịch vụ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full pl-10 pr-4 py-2 rounded-xl text-sm border focus:outline-none focus:border-teal-400 transition ${
+                  darkMode
+                    ? "bg-black border-gray-800 text-white placeholder-gray-500"
+                    : "bg-gray-50 border-gray-300 text-black placeholder-gray-400"
+                }`}
+              />
+            </div>
+            <input
+              type="date"
+              className="border p-2 rounded-full"
+              value={searchDate}
+              onChange={(e) => setSearchDate(e.target.value)}
+            />
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-gray-300">
+            <table className="w-full table-fixed text-left border-collapse">
+              <thead>
+                <tr
+                  className={`text-xs uppercase tracking-wider border-b ${
+                    darkMode
+                      ? "bg-gray-900/80 border-gray-800 text-gray-400"
+                      : "bg-gray-50 border-gray-200 text-gray-500"
+                  }`}
+                >
+                  <th className="py-4 px-6 w-[22%]">Giao dịch</th>
+
+                  <th className="py-4 px-6 w-[18%]">Phương thức</th>
+
+                  <th className="py-4 px-6 w-[25%]">Thời gian</th>
+
+                  <th className="py-4 px-6 w-[15%]">Trạng thái</th>
+
+                  <th className="py-4 px-6 w-[20%] text-right">Số tiền</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <tr
+                    key={index}
+                    className="animate-pulse border-b border-gray-200"
+                  >
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-20 rounded bg-gray-300"></div>
+                    </td>
+
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-20 rounded bg-gray-300"></div>
+                    </td>
+
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-32 rounded bg-gray-300"></div>
+                    </td>
+
+                    <td className="py-4 px-6">
+                      <div className="h-6 w-24 rounded-full bg-gray-300"></div>
+                    </td>
+
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-24 ml-auto rounded bg-gray-300"></div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>
+    );
+  }
   return (
     <div
-      className={`min-h-screen pt-28 pb-12 px-6 md:px-16 transition-colors duration-200 ${
+      className={`min-h-[80vh] pt-28 pb-12 px-6 md:px-16 transition-colors duration-200 ${
         darkMode ? "bg-black text-white" : "bg-gray-50 text-gray-900"
       }`}
     >

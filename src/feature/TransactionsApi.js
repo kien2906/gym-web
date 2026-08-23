@@ -3,7 +3,8 @@ import { baseApi } from "../services/baseApi";
 const Order= baseApi.injectEndpoints({
     endpoints : (builder) =>({
         getOrder : builder.query({
-            query : () => "/orders"
+            query : () => "/orders",
+            providesTags:["Tracstion"]
         })
     })
 })

@@ -1,6 +1,6 @@
 
 
-
+"use clinet"
 function InputCommon({props}) {
 
     const {name, type ,placeholder,classname,value,handChange}= props
