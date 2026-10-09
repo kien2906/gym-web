@@ -20,17 +20,17 @@ const Home = () => {
   useEffect(() => {
     AOS.init({
       duration: 1000,
-      once: true,
     });
   }, []);
 
   return (
-    <>
+    <div className=" w-full overflow-x-hidden">
       <div
         style={{
           backgroundImage: `url(${backgroundAvif})`,
         }}
-        className="h-screen w-full bg-cover bg-center flex justify-between items-center gap-7 px-60 fade-up"
+        className="h-screen  bg-cover bg-center flex justify-between items-center gap-7 px-60 "
+        data-aos="fade-up"
       >
         <div className="flex flex-col items-start gap-5 text-white">
           <h1 className="text-5xl pb-7 font-bold w-[500px]">
@@ -96,7 +96,7 @@ const Home = () => {
       <Home6 />
       <Home7 />
       <Home8 />
-    </>
+    </div>
   );
 };
 
@@ -104,9 +104,7 @@ const Home1 = () => {
   const { darkMode } = useContext(Theme);
   return (
     <>
-      <div
-        className={`${darkMode ? "bg-black text-white" : "bg-white"}`}
-      >
+      <div className={`${darkMode ? "bg-black text-white" : "bg-white"}`}>
         <div
           data-aos="fade-up"
           className={`flex justify-center items-center py-20 gap-5 `}
@@ -169,7 +167,6 @@ const Home2 = () => {
   return (
     <>
       <div
-        
         className={`w-full flex items-stretch gap-8 py-16 px-60
       ${darkMode ? "bg-black text-white shadow-[0_-15px_30px_rgba(255,255,255,0.1),0_15px_30px_rgba(255,255,255,0.1),0_0_50px_rgba(255,255,255,0.08)]" : "bg-white text-black"}`}
       >
@@ -276,7 +273,7 @@ const Home4 = () => {
             in ligula. Semper at tempufddfel. Lorem ipsum dolor sit amet elit.
           </p>
 
-          <div >
+          <div>
             <div className="w-[450px] py-3">
               <h2 className="font-bold text-md mb-3">Immune</h2>
 
@@ -328,7 +325,6 @@ const Home5 = () => {
   return (
     <>
       <div
-      
         className={`flex flex-col items-center gap-5 p-20 h-full  ${darkMode ? "bg-black text-white w-full" : "bg-[#6c757d] text-white"} `}
       >
         <h2 className=" text-4xl font-bold text-center w-[800px] text-[#eee]">
@@ -360,7 +356,6 @@ const Home6 = () => {
   return (
     <>
       <div
-   
         className={`flex flex-col items-center p-30 ${darkMode ? "bg-black text-white   shadow-[0_-15px_30px_rgba(255,255,255,0.1),0_15px_30px_rgba(255,255,255,0.1),0_0_50px_rgba(255,255,255,0.08)]" : "bg-white"}`}
       >
         <div className="flex flex-col items-center gap-2 mb-10">
@@ -520,7 +515,6 @@ const Home8 = () => {
 
   return (
     <div
-     
       className={`flex flex-col items-center justify-center py-10 w-full min-h-screen ${
         darkMode ? "bg-black text-white" : "bg-white text-gray-800"
       }`}

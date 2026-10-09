@@ -1,24 +1,73 @@
 import { FiEdit3, FiPlus, FiTrash2 } from "react-icons/fi";
-import { useGetClassQuery } from "../../feature/classApi";
-import { i, tr } from "framer-motion/m";
+import {
+  useCreateClassMutation,
+  useDeleteClassMutation,
+  useEditClassMutation,
+  useGetClassQuery,
+} from "../../feature/classApi";
+
 import { useEffect, useState } from "react";
+import AddClass from "../../components/AddClass";
 
 function Classess() {
   const [listClass, setListClass] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
   const { data } = useGetClassQuery();
+  const [createClass] = useCreateClassMutation();
+  const [deleteClass] = useDeleteClassMutation();
+  const [selectedClass, setSelectedClass] = useState(null);
+
+  const [editClass] = useEditClassMutation();
+  const handleEdit = (id) => {
+    const classItem = data?.classes?.find((item) => item._id === id);
+    setSelectedClass(classItem);
+    setIsOpen(true);
+  };
 
   useEffect(() => {
     setListClass(data);
   }, [data]);
   console.log(data);
+
+  const handleSubmit = async (form, id) => {
+    try {
+      if (id) {
+        await editClass({
+          id: selectedClass._id,
+          formData: form,
+        }).unwrap();
+      } else {
+        await createClass(form).unwrap();
+      }
+
+      setIsOpen(false);
+      setSelectedClass(null);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await deleteClass(id).unwrap();
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className=" mx-auto flex justify-start flex-col shadow-sm bg-white rounded-3xl">
+    <div className=" bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-6 flex justify-between items-center  border-b border-slate-100 ">
         <h2 className="font-bold  text-lg text-slate-800">Danh sách lớp</h2>
 
         <div>
-          <button className="bg-teal-500 text-white text-sm font-bold rounded-2xl px-4 py-2  font-bold transition-all shadow-sm flex items-center gap-2 hover:bg-teal-700">
+          <button
+            className="bg-teal-500 text-white text-sm font-bold rounded-2xl px-4 py-2  font-bold transition-all shadow-sm flex items-center gap-2 hover:bg-teal-700"
+            onClick={() => setIsOpen((pre) => !pre)}
+          >
             <FiPlus className="w-4 h-4" />
             Thêm classes
           </button>
@@ -42,13 +91,9 @@ function Classess() {
             {listClass?.classes?.map((item) => (
               <tr
                 key={item._id}
-                className="   border border-slate-200/55
-    hover:bg-teal-500
-    hover:rounded-2xl
-    group
-    transition-all duration-500"
+                className="border border-slate-200/55 hover:bg-teal-500 group transition-all duration-500"
               >
-                <td className="px-8 py-5      group-hover:rounded-l-2xl ">
+                <td className="px-8 py-5  ">
                   <img
                     src={`http://localhost:3001/uploads/${item.image}`}
                     alt={item.name}
@@ -74,13 +119,19 @@ function Classess() {
                   {item.capacity}
                 </td>
 
-                <td className="px-6 py-5   group-hover:rounded-r-2xl ">
+                <td className="px-6 py-5  ">
                   <div className="flex items-center justify-center gap-3 ">
-                    <button className="p-2 text-slate-400 hover:text-blue-500 transition-colors group-hover:text-white">
+                    <button
+                      className="p-2 text-slate-400 hover:text-blue-500 transition-colors group-hover:text-white"
+                      onClick={() => handleEdit(item._id)}
+                    >
                       <FiEdit3 className="w-4 h-4" />
                     </button>
 
-                    <button className="p-2 text-slate-400 hover:text-red-500 transition-colors group-hover:text-white">
+                    <button
+                      className="p-2 text-slate-400 hover:text-red-500 transition-colors group-hover:text-white"
+                      onClick={() => handleDelete(item._id)}
+                    >
                       <FiTrash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -90,6 +141,15 @@ function Classess() {
           </tbody>
         </table>
       </div>
+      <AddClass
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+          setSelectedClass(null);
+        }}
+        onSubmit={handleSubmit}
+        classData={selectedClass}
+      />
     </div>
   );
 }

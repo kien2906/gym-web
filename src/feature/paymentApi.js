@@ -3,6 +3,10 @@
 
 const Payment = baseApi.injectEndpoints({
     endpoints : (builder) =>({
+          getAllPayments : builder.query({
+             query : () => "/payment",
+             providesTags: ["Payment"],
+          }),
        createPayment : builder.mutation({
          query : (data) =>({
             url : "/payment",
@@ -15,4 +19,4 @@ const Payment = baseApi.injectEndpoints({
     })
 })
 
-export const {useCreatePaymentMutation} = Payment
+export const {useGetAllPaymentsQuery, useCreatePaymentMutation} = Payment

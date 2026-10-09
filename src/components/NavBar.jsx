@@ -2,19 +2,19 @@ import { Search, Moon, Sun, LogOut, User, History } from "lucide-react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import { useGetCartQuery } from "../feature/cartSlice";
 import { useGetProfileQuery } from "../feature/profileApi";
 import { useEffect } from "react";
-import { useGetCartQuery } from "../feature/cartSlice";
+
 const NavBar = ({ darkMode, handClick }) => {
   const location = useLocation();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
   const nav = useNavigate();
-
+  const { data, } = useGetCartQuery();
   const { data: profile } = useGetProfileQuery(user?.id);
-  const {data}=useGetCartQuery()
+
   const cartItemCount = data?.cart?.items?.length;
   console.log(profile?.user?.avatar);
   useEffect(() => {

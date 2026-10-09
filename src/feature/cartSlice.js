@@ -1,5 +1,4 @@
 
-import { createSlice } from "@reduxjs/toolkit";
 import { baseApi } from "../services/baseApi";
 
 
@@ -78,7 +77,7 @@ const addtoCartApi = baseApi.injectEndpoints({
     }),
     getCart: builder.query({
       query: () => "/cart",
-      providesTags: ["Cart","Payment"],
+      providesTags: ["Cart"],
     }),
     deleteCart: builder.mutation({
       query: (id) => ({
