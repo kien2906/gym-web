@@ -15,6 +15,8 @@ import { Home7 } from "./Home";
 import about1 from "../assets/about1.jpg";
 import about2 from "../assets/about2.jpg";
 import Breadcrumb from "../components/Breadcrumb";
+import Modal from "../components/Modal";
+import AddClassModal from "../components/AddClass";
 
 const About = () => {
   return (
@@ -305,6 +307,8 @@ const About6 = () => {
           </div>
         </div>
       </div>
+    
+      <AddClassModal isOpen={false} ></AddClassModal>
     </>
   );
 };

@@ -14,21 +14,29 @@ const ReviewModal = ({
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (rating === 0) {
-      alert("Vui lòng chọn số sao đánh giá!");
-      return;
-    }
+  e.preventDefault();
 
-    try {
-      await onSubmit({ rating, comment });
-      setRating(0);
-      setComment("");
-      onClose();
-    } catch (error) {
-      setError(error?.data?.message || "Có lỗi xảy ra");
-    }
-  };
+  if (rating === 0) {
+    setError("Vui lòng chọn số sao đánh giá!");
+    return;
+  }
+
+  try {
+    setError("");
+
+    await onSubmit({ rating, comment });
+
+    setRating(0);
+    setComment("");
+    onClose();
+  } catch (error) {
+    console.log("Lỗi nhận được trong Modal:", error);
+
+    setError(
+      error?.data?.message || "Có lỗi xảy ra"
+    );
+  }
+};
 
   const handleCloseAndReset = () => {
     setRating(0);
@@ -84,17 +92,18 @@ const ReviewModal = ({
 
                 return (
                   <button
+                    type="button"
                     key={start}
                     onClick={() => setRating(start)}
-                    onMouseEnter={() => setHoverRating(start)} // Rê chuột vào để xem trước
+                    onMouseEnter={() => setHoverRating(start)}
                     onMouseLeave={() => setHoverRating(0)}
                   >
                     <Star
-                      size={32} // Kích thước ngôi sao
+                      size={32}
                       className={`transition-colors duration-150 ${
                         isFilled
-                          ? "fill-amber-400 text-amber-400 drop-shadow-sm" 
-                          : "text-gray-300" 
+                          ? "fill-amber-400 text-amber-400 drop-shadow-sm"
+                          : "text-gray-300"
                       }`}
                     />
                   </button>
@@ -104,7 +113,7 @@ const ReviewModal = ({
 
             {/* Hiển thị text trạng thái sao dựa trên lựa chọn */}
             <p className="mt-2 text-xs font-semibold text-teal-600 min-h-[16px]">
-              {rating === 5 && "Cực kỳ hài lòng!"} <Star></Star>
+              {rating === 5 && "Cực kỳ hài lòng!"}
               {rating === 4 && "Rất tốt! ⭐⭐⭐ Rely"}
               {rating === 3 && "Bình thường ⭐⭐⭐"}
               {rating === 2 && "Tạm ổn ⭐⭐"}

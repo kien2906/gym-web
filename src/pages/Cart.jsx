@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ShoppingBag, Sparkles } from "lucide-react";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { useCreatePaymentMutation } from "../feature/paymentApi";
+import { useClearCartMutation, useDeleteCartMutation, useGetCartQuery } from "../feature/cartSlice";
 
 const Cart = () => {
   const [open, setOpen] = useState(null);

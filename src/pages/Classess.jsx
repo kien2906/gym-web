@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Search, ShoppingBag } from "lucide-react";
 import { useGetClassQuery } from "../feature/classApi";
 import Breadcrumb from "../components/Breadcrumb";
+import { useAddCartsMutation } from "../feature/cartSlice";
 
 function Classess() {
   const navigate = useNavigate();
@@ -154,8 +155,16 @@ function Classess() {
                             ? `${product.price.toLocaleString("vi-VN")}đ`
                             : "Free"}
                         </div>
-                        <div className="absolute bottom-3 left-3 bg-teal-700 text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm">
-                          Hot
+                        <div
+                          className={`absolute bottom-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm ${
+                            product.status?.toLowerCase() === "closed"
+                              ? "bg-rose-600 text-white"
+                              : "bg-teal-700 text-white"
+                          }`}
+                        >
+                          {product.status?.toLowerCase() === "closed"
+                            ? "Đã đóng"
+                            : "Đang mở"}
                         </div>
                       </div>
 
@@ -173,7 +182,14 @@ function Classess() {
                         </p>
 
                         <div className="flex items-center gap-2 mt-auto pt-4 border-t border-slate-100">
-                          {isAddingCart ? (
+                          {product.status?.toLowerCase() === "closed" ? (
+                            <button
+                              disabled
+                              className="flex flex-1 items-center justify-center gap-2 bg-slate-200 px-4 py-2.5 text-xs font-medium text-slate-500 rounded-sm cursor-not-allowed"
+                            >
+                              Lớp đã đóng
+                            </button>
+                          ) : isAddingCart ? (
                             <button
                               disabled
                               className="flex flex-1 items-center justify-center gap-2 bg-gray-500 px-4 py-2.5 text-xs font-medium text-white rounded-sm"
@@ -234,8 +250,16 @@ function Classess() {
                           ? `${product.price.toLocaleString("vi-VN")}đ`
                           : "Free"}
                       </div>
-                      <div className="absolute bottom-3 left-3 bg-teal-700 text-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm">
-                        New
+                      <div
+                        className={`absolute bottom-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-sm ${
+                          product.status?.toLowerCase() === "closed"
+                            ? "bg-rose-600 text-white"
+                            : "bg-teal-700 text-white"
+                        }`}
+                      >
+                        {product.status?.toLowerCase() === "closed"
+                          ? "Đã đóng"
+                          : "Đang mở"}
                       </div>
                     </div>
 
@@ -253,13 +277,22 @@ function Classess() {
                       </p>
 
                       <div className="mt-auto pt-4 border-t border-slate-100">
-                        <button
-                          onClick={() => navigate("/login")}
-                          className="flex w-full items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 active:bg-teal-900 px-4 py-2.5 text-xs font-medium text-white transition-colors duration-150 rounded-sm shadow-sm"
-                        >
-                          <ShoppingBag size={14} />
-                          Đăng nhập để thêm
-                        </button>
+                        {product.status?.toLowerCase() === "closed" ? (
+                          <button
+                            disabled
+                            className="flex w-full items-center justify-center gap-2 bg-slate-200 px-4 py-2.5 text-xs font-medium text-slate-500 rounded-sm cursor-not-allowed"
+                          >
+                            Lớp đã đóng
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => navigate("/login")}
+                            className="flex w-full items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 active:bg-teal-900 px-4 py-2.5 text-xs font-medium text-white transition-colors duration-150 rounded-sm shadow-sm"
+                          >
+                            <ShoppingBag size={14} />
+                            Đăng nhập để thêm
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

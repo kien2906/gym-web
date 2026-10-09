@@ -17,16 +17,24 @@ import {
 } from "../feature/review";
 import { useState } from "react";
 import ReviewModal from "./modelReview";
+import { useAddCartsMutation } from "../feature/cartSlice";
 
 function ClassesDetail() {
   const { id } = useParams();
-  const { data, isLoading } = useGetClassIdQuery(id);
-  const { data: dataRview, isLoading: loadingReview } = useGetReviewsQuery(id);
+  const { data: dataClass, isLoading } = useGetClassIdQuery(id);
+  console.log(dataClass?.data?.status);
+  const {
+    data: dataRview,
+    isLoading: loadingReview,
+    isFetching,
+  } = useGetReviewsQuery(id);
   const [addCart, { isLoading: isAddingCart }] = useAddCartsMutation();
   const [modelReview, setModelReview] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [createReview, { error }] = useCreateReviewsMutation();
   const reviewUser = dataRview?.reviews;
-  const classItem = data?.data ?? data;
+  console.log(reviewUser?.user);
+  const classItem = dataClass?.data ?? dataClass;
   const schedule = classItem?.schedule;
   const trainer = classItem?.trainer;
   const token = localStorage.getItem("token");
@@ -44,7 +52,7 @@ function ClassesDetail() {
       minute: "2-digit",
     });
   };
-  console.log(reviewUser);
+
   console.log(dataRview?.reviews);
   const AvgRating =
     reviewUser?.length > 0
@@ -67,6 +75,10 @@ function ClassesDetail() {
     }
   };
 
+  const showReview = showAll
+    ? dataRview?.reviews
+    : dataRview?.reviews.slice(0, 2);
+  console.log(showReview);
   const handReview = async ({ rating, comment }) => {
     const res = await createReview({
       classId: id,
@@ -103,7 +115,7 @@ function ClassesDetail() {
       <section className="relative  bg-slate-900 overflow-hidden min-h-[30px] flex items-center">
         <div className="absolute inset-0 z-0">
           <img
-            src={`http://localhost:3001/uploads/${data?.data?.image}`}
+            src={`http://localhost:3001/uploads/${dataClass?.data?.image}`}
             alt={classItem?.name}
             className="w-full h-full object-cover opacity-25 filter grayscale contrast-125"
             onError={(e) => {
@@ -257,11 +269,11 @@ function ClassesDetail() {
 
           {/* CỘT PHẢI: SIDEBAR STICKY ĐĂNG KÝ HỌC */}
           <div className="lg:col-span-1">
-            <div className="sticky top-30 bg-white border border-slate-200/80 rounded-sm shadow-[0_4px_20px_rgba(0,0,0,0.02)] overflow-hidden">
+            <div className="sticky top-20 bg-white border border-slate-200/80 rounded-sm shadow-[0_4px_20px_rgba(0,0,0,0.02)] overflow-hidden">
               {/* Ảnh thu nhỏ trên mobile / Preview trên Desktop */}
               <div className="relative aspect-video w-full bg-slate-900 hidden lg:block border-b border-slate-100">
                 <img
-                  src={`http://localhost:3001/uploads/${data?.data?.image}`}
+                  src={`http://localhost:3001/uploads/${dataClass?.data?.image}`}
                   alt="Preview"
                   className="w-full h-full object-cover opacity-80"
                   onError={(e) => {
@@ -299,16 +311,18 @@ function ClassesDetail() {
                     <div className="flex flex-col gap-2.5">
                       <button
                         onClick={() => handleAddToCart(id)}
-                        className="w-full bg-teal-700 hover:bg-teal-800 active:bg-teal-900 text-white text-sm font-medium py-3 px-4 rounded-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 group"
+                        disabled={dataClass?.data?.status === "closed"}
+                        className={`w-full text-white text-sm font-medium py-3 px-4 rounded-sm transition-all duration-150 shadow-sm flex items-center justify-center gap-2 group ${
+                          dataClass?.data?.status === "closed"
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-teal-700 hover:bg-teal-800 active:bg-teal-900"
+                        }`}
                       >
                         <ShoppingBag
                           size={16}
                           className="transition-transform group-hover:scale-110"
                         />
                         Thêm vào giỏ hàng
-                      </button>
-                      <button className="w-full bg-white hover:bg-slate-50 active:bg-slate-100 text-teal-700 border border-teal-200 text-sm font-medium py-3 px-4 rounded-sm transition-colors duration-150 text-center">
-                        Đăng ký ngay
                       </button>
                     </div>
                   ) : (
@@ -323,15 +337,12 @@ function ClassesDetail() {
                         />
                         Thêm vào giỏ
                       </button>
-                      <button className="w-full bg-white hover:bg-slate-50 active:bg-slate-100 text-teal-700 border border-teal-200 text-sm font-medium py-3 px-4 rounded-sm transition-colors duration-150 text-center">
-                        Đăng ký ngay
-                      </button>
                     </div>
                   )}
                 </div>
 
                 <div className="text-center mt-3.5">
-                  <span className="text-[11px] text-slate-400 font-light">
+                  <span className="text-sm text-slate-400 font-light">
                     Cam kết bảo lưu lộ trình học trong 12 tháng
                   </span>
                 </div>
@@ -364,7 +375,7 @@ function ClassesDetail() {
         </div>
 
         {/* 3. PHẦN DƯỚI: HỆ THỐNG FAQ THƯƠNG MẠI */}
-        {/* 3. PHẦN DƯỚI: HỆ THỐNG FAQ THƯƠNG MẠI */}
+
         <hr className="my-16 border-slate-200/60" />
 
         {/* KHỐI ĐÁNH GIÁ & PHẢN HỒI TỪ HỌC VIÊN */}
@@ -408,38 +419,50 @@ function ClassesDetail() {
               Đánh giá từ khách hàng
             </h3>
             <button
-              onClick={() => setModelReview(true)} // Thay bằng logic mở modal của bạn
-              className="inline-flex items-center justify-center text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-sm transition-colors duration-150 shadow-sm"
+              disabled={dataClass?.data?.status === "closed"}
+              onClick={() => {
+                if (dataClass?.data?.status !== "closed") {
+                  setModelReview(true);
+                }
+              }}
+              className={`inline-flex items-center justify-center text-xs font-semibold text-white px-4 py-2 rounded-sm transition-colors duration-150 shadow-sm ${
+                dataClass?.data?.status === "closed"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-teal-600 hover:bg-teal-700"
+              }`}
             >
               Viết đánh giá
             </button>
           </div>
           {/* Danh sách các review */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {reviewUser?.map((review, idx) => (
+            {showReview?.map((review) => (
               <div
-                key={idx}
+                key={review._id}
                 className="bg-white border border-slate-200/60 p-6 rounded-sm space-y-4 shadow-[0_1px_2px_rgba(0,0,0,0.01)]"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <img
-                      src={`http://localhost:3001/uploads/${review?.user.avatar}`}
-                      alt={review.name}
+                      src={
+                        review?.user?.avatar
+                          ? `http://localhost:3001/uploads/${review.user.avatar}`
+                          : "/default-avatar.png"
+                      }
+                      alt={review?.user?.fullName || "User"}
                       className="w-10 h-10 rounded-full object-cover border border-slate-100"
                     />
+
                     <div>
                       <h4 className="text-sm font-bold text-slate-800 leading-snug">
-                        {review?.user.fullName}
+                        {review?.user?.fullName || "Người dùng"}
                       </h4>
+
                       <p className="text-[11px] text-slate-400 font-light">
-                        {review.role}
+                        {review?.user?.role || "Học viên"}
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs text-slate-400 font-light">
-                    {review.date}
-                  </span>
                 </div>
 
                 <div className="flex text-amber-500 text-xs gap-0.5">
@@ -455,8 +478,11 @@ function ClassesDetail() {
           </div>
           {reviewUser?.length > 2 && (
             <div className="text-center pt-2">
-              <button className="inline-flex items-center justify-center text-xs font-semibold text-teal-700 hover:text-teal-800 bg-teal-50/50 hover:bg-teal-50 border border-teal-100/80 px-5 py-2.5 rounded-sm transition-colors duration-150">
-                Xem tất cả đánh giá
+              <button
+                className="inline-flex items-center justify-center text-xs font-semibold text-teal-700 hover:text-teal-800 bg-teal-50/50 hover:bg-teal-50 border border-teal-100/80 px-5 py-2.5 rounded-sm transition-colors duration-150"
+                onClick={() => setShowAll((pre) => !pre)}
+              >
+                {showAll ? "Thu gọn đánh giá" : "Xem tất cả đánh giá"}
               </button>
             </div>
           )}
